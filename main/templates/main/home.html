@@ -1,0 +1,55 @@
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+
+	<script type="text/template" id="post-template">
+    	<div class="panel panel-default">
+  			<div class="panel-heading">
+				<img  alt="%username%" width=40 height=40
+		src="http://johnmeinken.com/drupal/sites/default/files/styles/thumbnail/public/pictures/%userImage%">
+				%username% | %date%
+			</div>
+  			<div class="panel-body">
+    			%body%
+				<div class="well">
+					<div class="comments" id="comments-%postId%"></div>
+					<form class="new-comment-form" id="new-comment-form-%postId%" data-post-id="%postId%">
+						<input type="hidden" name="post_id" value="%postId%">
+						<input type="hidden" name="uid" value="1" />
+						<textarea name="body"></textarea>
+						<button type="submit">Submit Comment</button>
+					</form>
+				</div>
+  			</div>
+		</div>
+	</script>
+	
+	<script type="text/template" id="comment-template">
+    	<div class="panel panel-default">
+  			<div class="panel-heading">
+				<img  alt="%username%" width=40 height=40
+		src="http://johnmeinken.com/drupal/sites/default/files/styles/thumbnail/public/pictures/%userImage%">
+				%username% | %date%
+			</div>
+  			<div class="panel-body">
+    			%body%
+  			</div>
+		</div>
+	</script>
+
+	<script type="text/javascript">
+	
+
+	      
+	</script>
+	
+	<form id="new-post-form">
+		<input type="hidden" name="uid" value="1" />
+		<textarea name="body"></textarea>
+		<button type="submit">Submit</button>
+	</form>
+	<div id="output"></div>
+	
+
+{% endblock %}
