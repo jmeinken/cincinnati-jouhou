@@ -1,5 +1,11 @@
 mf = {}
 
+
+/// PARAMETERS ////////////////////////////////////////////////////////////////////////////////
+
+mf.uid = 0;				//application needs to set this, otherwise nothing will be editable
+mf.lastPostId = 0;
+
 /// UTILITIES /////////////////////////////////////////////////////////////////////////////////
 
 mf.templateEngine = function (templateId, args) {
@@ -38,6 +44,11 @@ mf.appendCommentEvents = function() {
 			var result = mf.templateEngine('comment-template', args);
 			$('#comments-'+json.postId).append(result);
 			$("#new-comment-form-"+json.postId+' textarea[name=body]').val('');
+			//append comment options
+			var commentUserOptionsStr = mf.templateEngine('comment-user-options-template', args);
+			if (args.editable) {
+				$('#comment-user-options-'+args.commentId).html(commentUserOptionsStr);
+			}
 		}).fail(function( xhr, status, errorThrown ) {
 			$('#search_status').html('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>');
 			console.log( "Error: " + errorThrown );
@@ -120,6 +131,13 @@ mf.appendCommentEvents = function() {
 
 		e.preventDefault();
 	});
+	
+	$('.show-hidden-comments').click(function(e) {
+		postId = $(this).attr('data-post-id');
+		$('#hidden-comments-block-'+postId).show();
+		$(this).parent().remove();
+		e.preventDefault();
+	});
 }
 
 mf.appendPostEvents = function() {
@@ -137,6 +155,11 @@ mf.appendPostEvents = function() {
 			var args = json;  //postId, uid, username, userImage, body
 			var result = mf.templateEngine('post-template', args);
 			$('#output').prepend(result);
+			//append post options
+			var postUserOptionsStr = mf.templateEngine('post-user-options-template', args);
+			if (args.editable) {
+				$('#post-user-options-'+args.postId).html(postUserOptionsStr);
+			}
 			mf.appendEvents();
 			$("#new-post-form textarea[name=body]").val('');
 		}).fail(function( xhr, status, errorThrown ) {
@@ -221,6 +244,10 @@ mf.appendPostEvents = function() {
 
 		e.preventDefault();
 	});
+	
+	$('#show-more-posts-btn').click(function() {
+		mf.loadPosts();
+	});
 
 }
 
@@ -228,7 +255,9 @@ mf.appendPostEvents = function() {
 
 mf.loadPosts = function() {
 	var data = {
-		uid: 1
+		uid: mf.uid,
+		last_post_id: mf.lastPostId,
+		post_count: 10,
 	}
 	var url = "/microfeed/posts";
 	$.ajax({
@@ -241,13 +270,49 @@ mf.loadPosts = function() {
 			var args = json[i];  //postId, uid, username, userImage, body
 			var result = mf.templateEngine('post-template', args);
 			$('#output').append(result);
-			for (var j=0; j<json[i].comments.length; j++) {
-				//alert(json[i].comments[j].body);
-				var args2 = json[i].comments[j];
-				var result2 = mf.templateEngine('comment-template', args2);
-				//alert(result2);
-				$('#comments-'+json[i].postId).append(result2);
+			//append post options
+			var postUserOptionsStr = mf.templateEngine('post-user-options-template', args);
+			if (json[i].editable) {
+				$('#post-user-options-'+json[i].postId).html(postUserOptionsStr);
 			}
+			// append comments
+			var commentCount = json[i].comments.length
+			if (commentCount > 4) {
+				var hiddenCommentBlock = mf.templateEngine('hidden-comments-template', args);
+				//alert(result2);
+				$('#comments-'+json[i].postId).append(hiddenCommentBlock);
+				for (var j=0; j<commentCount; j++) {
+					var args2 = json[i].comments[j];
+					var result2 = mf.templateEngine('comment-template', args2);
+					if (j < commentCount-3) {
+						$('#hidden-comments-block-'+json[i].postId).append(result2);
+					} else {
+						$('#comments-'+json[i].postId).append(result2);
+					}
+					//append comment options
+					var commentUserOptionsStr = mf.templateEngine('comment-user-options-template', args2);
+					if (json[i].comments[j].editable) {
+						$('#comment-user-options-'+json[i].comments[j].commentId).html(commentUserOptionsStr);
+					}
+				}
+			} else {
+				for (var j=0; j<commentCount; j++) {
+					var args2 = json[i].comments[j];
+					var result2 = mf.templateEngine('comment-template', args2);
+					$('#comments-'+json[i].postId).append(result2);
+					//append comment options
+					var commentUserOptionsStr = mf.templateEngine('comment-user-options-template', args2);
+					if (json[i].comments[j].editable) {
+						$('#comment-user-options-'+json[i].comments[j].commentId).html(commentUserOptionsStr);
+					}
+				}
+			}
+		}
+		$('#show-more-posts-block').remove();
+		if (json.length == 10) {
+			var result = mf.templateEngine('more-posts-template', args);
+			$('#output').append(result);
+			mf.lastPostId = json[9].postId;
 		}
 		mf.appendEvents();
 	}).fail(function( xhr, status, errorThrown ) {
@@ -263,6 +328,19 @@ mf.loadPosts = function() {
 
 $( document ).ready(function() {
 	
+	//load main container
+	args = {
+		uid: mf.uid
+	}
+	var result = mf.templateEngine('main-container-template', args);
+	$('#microfeed-container').html(result);
+	
+	//load modals
+	args = {}
+	var result = mf.templateEngine('modals-template', args);
+	$('#microfeed-modals').html(result);
+		
+	//load first set of posts
 	mf.loadPosts();
 
 });

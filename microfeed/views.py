@@ -16,7 +16,12 @@ def home(request):
 @csrf_exempt
 def get_posts(request):
     uid = int( request.GET.get('uid') )
-    qPostView = models.PostView.objects.all()
+    last_post_id = int( request.GET.get('last_post_id') )
+    post_count = int( request.GET.get('post_count') )
+    if last_post_id == 0:
+        qPostView = models.PostView.objects.all()[:post_count]
+    else:
+        qPostView = models.PostView.objects.all().filter(id__lt=last_post_id)[:post_count]
     response = []
     for oPostView in qPostView:
         x = {}
@@ -26,18 +31,27 @@ def get_posts(request):
         x['userImage'] = oPostView.user_image
         x['body'] = oPostView.body
         x['date'] = pretty.date( localtime( oPostView.created ).replace(tzinfo=None) )
+        if oPostView.uid == uid:
+            x['editable'] = True
+        else:
+            x['editable'] = False
         # append comments
         x['comments'] = []
         qCommentView = models.CommentView.objects.all().filter(post_id=oPostView.id)
         for oCommentView in qCommentView:
-            x['comments'].append({
+            comment = {
                 'commentId' : oCommentView.id,
                 'uid' : oCommentView.uid,
                 'username' : oCommentView.username,
                 'userImage' : oCommentView.user_image,
                 'body' : oCommentView.body,
                 'date' : pretty.date( localtime( oCommentView.created ).replace(tzinfo=None) ),
-            })
+            }
+            if oCommentView.uid == uid:
+                comment['editable'] = True
+            else:
+                comment['editable'] = False
+            x['comments'].append(comment)
         response.append(x)
     return HttpResponse(json.dumps(response), content_type = "application/json")
 
@@ -61,6 +75,10 @@ def new_post(request):
     x['userImage'] = oPostView.user_image
     x['body'] = oPostView.body
     x['date'] = pretty.date( localtime( oPostView.created ).replace(tzinfo=None) )
+    if oPostView.uid == uid:
+        x['editable'] = True
+    else:
+        x['editable'] = False
     response = x
     return HttpResponse(json.dumps(response), content_type = "application/json")
 
@@ -81,6 +99,10 @@ def new_comment(request):
         'body' : oCommentView.body,
         'date' : pretty.date( localtime( oCommentView.created ).replace(tzinfo=None) )
     }
+    if oCommentView.uid == uid:
+        response['editable'] = True
+    else:
+        response['editable'] = False
     return HttpResponse(json.dumps(response), content_type = "application/json")
 
 

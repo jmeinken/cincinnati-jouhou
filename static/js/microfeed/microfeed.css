@@ -1,4 +1,10 @@
 
+#microfeed-container {
+	overflow-x: hidden;
+}
+
+
+
 .button-align {
 	text-align:right;
 	padding:3px 0;
@@ -55,6 +61,14 @@
 
 .edit-comment {
 	display: none;
+}
+
+.hidden-comments-block {
+	display: none;
+}
+
+#show-more-posts-block {
+	text-align: center;
 }
 
 form {
