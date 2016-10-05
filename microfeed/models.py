@@ -33,13 +33,13 @@ class PostView(TimeStampedModel):
 
 
 class Comment(TimeStampedModel):
-    post        = models.ForeignKey("Post")
+    post        = models.ForeignKey("Post", on_delete=models.CASCADE)
     uid         = models.IntegerField()
     body        = models.TextField(max_length=1000)
 
     
 class CommentView(TimeStampedModel):
-    post        = models.ForeignKey("Post")
+    post        = models.ForeignKey("Post", on_delete=models.DO_NOTHING)
     uid         = models.IntegerField()
     body        = models.TextField(max_length=1000)
     username    = models.CharField(max_length=100)
@@ -53,7 +53,7 @@ class CommentView(TimeStampedModel):
 # SELECT C.id, C.uid, C.post_id, C.body, C.created, C.modified, U.name AS `username`, F.filename as `user_image`
 # FROM (microfeed_comment C INNER JOIN users U ON C.uid = U.uid)
 #         LEFT OUTER JOIN file_managed F ON U.picture = F.fid
-# ORDER BY C.created DESC;
+# ORDER BY C.created;
 
         
 

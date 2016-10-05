@@ -1,0 +1,72 @@
+
+.button-align {
+	text-align:right;
+	padding:3px 0;
+}
+
+.post-block {
+	background-color:white;
+	padding:5px;margin:10px;
+	border-radius:7px;
+}
+
+.edit-post {
+	display: none;
+}
+
+.post-user-image {
+	min-width:55px;
+	float:left;
+}
+
+.post-user-options {
+	float:right;
+}
+
+.post-content {
+	padding:0 0 15px 55px;
+}
+
+.post-body {
+	font-size:1.1em;
+	padding-top:5px;
+}
+
+.comment {
+	border-top:1px solid #B0B0B0; 
+}
+
+.comment-user-image {
+	min-width:45px;
+	float:left;
+}
+
+.comment-user-options {
+	float:right;
+}
+
+.comment-content {
+	padding:0 0 10px 45px;
+}
+
+.comment-meta {
+	font-size:0.9em;
+}
+
+.edit-comment {
+	display: none;
+}
+
+form {
+    display: inline;
+}
+
+
+
+
+
+
+
+
+
+
