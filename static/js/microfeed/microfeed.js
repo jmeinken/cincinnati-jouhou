@@ -1,16 +1,28 @@
+
+// requires jQuery, FontAwesome, CropIt
+
+
+
+
+$ = jQuery;
 mf = {}
+
+
 
 
 /// PARAMETERS ////////////////////////////////////////////////////////////////////////////////
 
 mf.uid = 0;				//application needs to set this, otherwise nothing will be editable
 mf.lastPostId = 0;
+mf.subfolder = "/feed";
+mf.images = [];
 
 /// UTILITIES /////////////////////////////////////////////////////////////////////////////////
 
 mf.templateEngine = function (templateId, args) {
 	args = args || {};
 	var template = $('#'+templateId).html();
+	if (!template) template = '';
 	//console.log(templateId);
 	for (arg in args) {
 		var str = '[[' + arg + ']]'
@@ -20,11 +32,55 @@ mf.templateEngine = function (templateId, args) {
 }
 
 
+var mf_scripts = document.getElementsByTagName("script");
+var mf_script = mf_scripts[mf_scripts.length-1];
+
+mf.currentDirPath = function() {
+	var str = mf_script.src;
+	console.log(str.substring(0, str.lastIndexOf("/")));
+	return str.substring(0, str.lastIndexOf("/"));
+}
+
+
 /// EVENTS /////////////////////////////////////////////////////////////////////////////////////
 
 mf.appendEvents = function() {
 	mf.appendPostEvents();
 	mf.appendCommentEvents();
+	mf.appendImageEvents();
+}
+
+mf.appendImageEvents = function() {
+	$('#add-image-btn').unbind();
+	$('#add-image-btn').click(function() {
+		imageUri = $('.image-editor').cropit('export');
+		mf.images.push(imageUri);
+		args = {
+			index : mf.images.length - 1,
+			alt : 'preview',
+			imageUri : imageUri
+		}
+		$('#image-placeholder').remove();
+		var imgString = mf.templateEngine('image-preview-template', args);
+		$('#new-post-image-block').append(
+			imgString
+		);
+		var imgString = mf.templateEngine('image-placeholder-template', {});
+		$('#new-post-image-block').append(
+			imgString
+		);
+		//$('#my-img-' + mf.images.length).attr('src', mf.images[0]);
+		$('#add-image-modal').modal('hide');
+		mf.appendEvents();
+	});
+	
+	$('.remove-image').unbind();
+	$('.remove-image').click(function() {
+		var index = $(this).attr('data-image-index');
+		mf.images.splice(index, 1);
+		$('#image-preview-'+index).remove();
+	});
+	
 }
 
 mf.appendCommentEvents = function() {
@@ -33,7 +89,7 @@ mf.appendCommentEvents = function() {
 		var postId = $(this).attr('data-post-id');
 		//alert(postId);
 		var data = $("#new-comment-form-"+postId).serialize();		// post_id, uid, body
-		var url = "/microfeed/posts/comments/new";
+		var url = mf.subfolder + "/microfeed/posts/comments/new";
 		$.ajax({
 			url: url,
 			data: data,
@@ -49,6 +105,7 @@ mf.appendCommentEvents = function() {
 			if (args.editable) {
 				$('#comment-user-options-'+args.commentId).html(commentUserOptionsStr);
 			}
+			mf.appendEvents();
 		}).fail(function( xhr, status, errorThrown ) {
 			$('#search_status').html('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>');
 			console.log( "Error: " + errorThrown );
@@ -86,7 +143,7 @@ mf.appendCommentEvents = function() {
 	$(".edit-comment-form").submit(function(e) {
 		var commentId = $(this).attr('data-comment-id');
 		var data = $("#edit-comment-form-"+commentId).serialize();		// post_id, body
-		var url = "/microfeed/posts/comments/edit";
+		var url = mf.subfolder + "/microfeed/posts/comments/edit";
 		$.ajax({
 			url: url,
 			data: data,
@@ -111,7 +168,7 @@ mf.appendCommentEvents = function() {
 	$("#delete-comment-form").unbind();
 	$("#delete-comment-form").submit(function(e) {
 		var data = $('#delete-comment-form').serialize();		// post_id, body
-		var url = "/microfeed/posts/comments/delete";
+		var url = mf.subfolder + "/microfeed/posts/comments/delete";
 		$.ajax({
 			url: url,
 			data: data,
@@ -132,6 +189,7 @@ mf.appendCommentEvents = function() {
 		e.preventDefault();
 	});
 	
+	$('.show-hidden-comments').unbind();
 	$('.show-hidden-comments').click(function(e) {
 		postId = $(this).attr('data-post-id');
 		$('#hidden-comments-block-'+postId).show();
@@ -144,24 +202,29 @@ mf.appendPostEvents = function() {
 	
 	$('#new-post-form').unbind();
 	$("#new-post-form").submit(function(e) {
-		var data = $("#new-post-form").serialize();		// uid, body
-		var url = "/microfeed/posts/new";
+		
+		var data = $("#new-post-form").serialize();		// uid, body, images[]
+		var url = mf.subfolder + "/microfeed/posts/new";
 		$.ajax({
 			url: url,
 			data: data,
 			type: "POST",
 			dataType : "json"
 		}).done(function( json ) {
+			console.log(json.test);
 			var args = json;  //postId, uid, username, userImage, body
+			args.currentUid = mf.uid
 			var result = mf.templateEngine('post-template', args);
 			$('#output').prepend(result);
+			var result = mf.templateEngine('comment-form-template', args);
+			$('#comment-form-block-'+args.postId).append(result);
 			//append post options
 			var postUserOptionsStr = mf.templateEngine('post-user-options-template', args);
 			if (args.editable) {
 				$('#post-user-options-'+args.postId).html(postUserOptionsStr);
 			}
-			mf.appendEvents();
 			$("#new-post-form textarea[name=body]").val('');
+			mf.appendEvents();
 		}).fail(function( xhr, status, errorThrown ) {
 			$('#search_status').html('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>');
 			console.log( "Error: " + errorThrown );
@@ -199,7 +262,7 @@ mf.appendPostEvents = function() {
 	$(".edit-post-form").submit(function(e) {
 		var postId = $(this).attr('data-post-id');
 		var data = $("#edit-post-form-"+postId).serialize();		// post_id, body
-		var url = "/microfeed/posts/edit";
+		var url = mf.subfolder + "/microfeed/posts/edit";
 		$.ajax({
 			url: url,
 			data: data,
@@ -224,7 +287,7 @@ mf.appendPostEvents = function() {
 	$("#delete-post-form").unbind();
 	$("#delete-post-form").submit(function(e) {
 		var data = $('#delete-post-form').serialize();		// post_id, body
-		var url = "/microfeed/posts/delete";
+		var url = mf.subfolder + "/microfeed/posts/delete";
 		$.ajax({
 			url: url,
 			data: data,
@@ -245,6 +308,7 @@ mf.appendPostEvents = function() {
 		e.preventDefault();
 	});
 	
+	$("#show-more-posts-btn").unbind();
 	$('#show-more-posts-btn').click(function() {
 		mf.loadPosts();
 	});
@@ -259,7 +323,7 @@ mf.loadPosts = function() {
 		last_post_id: mf.lastPostId,
 		post_count: 10,
 	}
-	var url = "/microfeed/posts";
+	var url = mf.subfolder + "/microfeed/posts";
 	$.ajax({
 		url: url,
 		data: data,
@@ -267,13 +331,58 @@ mf.loadPosts = function() {
 		dataType : "json"
 	}).done(function( json ) {
 		for (var i=0; i<json.length; i++) {
-			var args = json[i];  //postId, uid, username, userImage, body
+			var args = json[i];  //postId, uid, username, userImage, body, comments, images
+			console.log(json[i].images)
+			args.currentUid = mf.uid
 			var result = mf.templateEngine('post-template', args);
 			$('#output').append(result);
+			if (mf.uid != 0) {
+				var result = mf.templateEngine('comment-form-template', args);
+				$('#comment-form-block-'+args.postId).append(result);
+			} else {
+				var result = mf.templateEngine('comment-form-login-template', {});
+				$('#comment-form-block-'+args.postId).append(result);
+			}
 			//append post options
 			var postUserOptionsStr = mf.templateEngine('post-user-options-template', args);
 			if (json[i].editable) {
 				$('#post-user-options-'+json[i].postId).html(postUserOptionsStr);
+			}
+			// append images
+			var imageCount = json[i].images.length
+			if (imageCount == 1) {
+				args2 = {
+					image1 : json[i].images[0]
+				}
+				var result2 = mf.templateEngine('post-image-thumbnails-template-1', args2);
+				$('#post-image-thumbnails-block-'+args.postId).append(result2);
+			}
+			if (imageCount == 2) {
+				args2 = {
+					image1 : json[i].images[0],
+					image2 : json[i].images[1]
+				}
+				var result2 = mf.templateEngine('post-image-thumbnails-template-2', args2);
+				$('#post-image-thumbnails-block-'+args.postId).append(result2);
+			}
+			if (imageCount == 3) {
+				args2 = {
+					image1 : json[i].images[0],
+					image2 : json[i].images[1],
+					image3 : json[i].images[2],
+				}
+				var result2 = mf.templateEngine('post-image-thumbnails-template-3', args2);
+				$('#post-image-thumbnails-block-'+args.postId).append(result2);
+			}
+			if (imageCount == 4) {
+				args2 = {
+					image1 : json[i].images[0],
+					image2 : json[i].images[1],
+					image3 : json[i].images[2],
+					extra : imageCount - 2
+				}
+				var result2 = mf.templateEngine('post-image-thumbnails-template-4', args2);
+				$('#post-image-thumbnails-block-'+args.postId).append(result2);
 			}
 			// append comments
 			var commentCount = json[i].comments.length
@@ -328,20 +437,55 @@ mf.loadPosts = function() {
 
 $( document ).ready(function() {
 	
-	//load main container
-	args = {
-		uid: mf.uid
-	}
-	var result = mf.templateEngine('main-container-template', args);
-	$('#microfeed-container').html(result);
-	
-	//load modals
-	args = {}
-	var result = mf.templateEngine('modals-template', args);
-	$('#microfeed-modals').html(result);
+	//load templates
+	$('#microfeed-templates').load(mf.currentDirPath()+'/microfeed_templates.html', function() {
 		
-	//load first set of posts
-	mf.loadPosts();
+		//load main container
+		args = {
+			uid: mf.uid
+		}
+		var result = mf.templateEngine('main-container-template', args);
+		$('#microfeed-container').html(result);
+		// show the post form if the user is logged in
+		if (mf.uid != 0) {
+			var result = mf.templateEngine('post-form-template', args);
+			$('#post-form-block').html(result);
+		} else {
+			var result = mf.templateEngine('post-form-login-template', args);
+			$('#post-form-block').html(result);
+		}
+		
+		//load modals
+		args = {}
+		var result = mf.templateEngine('modals-template', args);
+		$('#microfeed-modals').html(result);
+			
+		//load first set of posts
+		mf.loadPosts();
+		
+		//configure CROPIT
+        $('.image-editor').cropit({
+        	exportZoom : 2,
+        	maxZoom : 1,
+        	minZoom : 'fit',
+        	smallImage : 'allow'
+        });
+        $('.rotate-cw').click(function() {
+        	$('.image-editor').cropit('rotateCW');
+        });
+        $('.rotate-ccw').click(function() {
+    		$('.image-editor').cropit('rotateCCW');
+        });
+        $('.export').click(function() {
+        	var imageData = $('.image-editor').cropit('export');
+        	window.open(imageData);
+        });
+		
+		
+	});
+	
+	
+	
 
 });
 

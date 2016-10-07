@@ -7,6 +7,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.timezone import localtime
 
 from . import models
+from . import functions
+
+
+uploads_directory = '/home/ubuntu/django/feed-env/feed/static/uploads/'
 
 @csrf_exempt
 def home(request):
@@ -52,6 +56,10 @@ def get_posts(request):
             else:
                 comment['editable'] = False
             x['comments'].append(comment)
+        x['images'] = []
+        qPostImage = models.PostImage.objects.all().filter(post_id=oPostView.id)
+        for oPostImage in qPostImage:
+            x['images'].append('/static/uploads/post_images/' + oPostImage.image_name)
         response.append(x)
     return HttpResponse(json.dumps(response), content_type = "application/json")
 
@@ -63,9 +71,21 @@ def get_post(request, post_id):
 @csrf_exempt
 def new_post(request):
     uid = int( request.POST.get('uid') )
-    body = request.POST.get('body').replace('\n', '<br />')
+    images = request.POST.getlist('images[]')
+    body = functions.process_post_body( request.POST.get('body') )
     oPost = models.Post(uid=uid,body=body)
     oPost.save()
+    if images:
+        i = 1
+        for image in images:
+            imageArr = image.split(',')
+            file_name = 'image_' + str(oPost.id) + '_' + str(i) + '.png'
+            fh = open(uploads_directory + "post_images/" + file_name, "wb")
+            fh.write(imageArr[1].decode('base64'))
+            fh.close()
+            oPostImage = models.PostImage(post=oPost,image_name=file_name,order=i)
+            oPostImage.save()
+            i = i + 1
     # options = json.loads( request.POST.get('options') )
     oPostView = models.PostView.objects.all().get(id=oPost.id)
     x = {}
@@ -75,6 +95,7 @@ def new_post(request):
     x['userImage'] = oPostView.user_image
     x['body'] = oPostView.body
     x['date'] = pretty.date( localtime( oPostView.created ).replace(tzinfo=None) )
+    x['test'] = image
     if oPostView.uid == uid:
         x['editable'] = True
     else:
@@ -86,7 +107,7 @@ def new_post(request):
 def new_comment(request):
     post_id = int( request.POST.get('post_id') )
     uid = int( request.POST.get('uid') )
-    body = request.POST.get('body').replace('\n', '<br />')
+    body = functions.process_comment_body( request.POST.get('body') )
     oComment = models.Comment(uid=uid,body=body,post_id=post_id)
     oComment.save()
     oCommentView = models.CommentView.objects.all().get(id=oComment.id)

@@ -3,7 +3,9 @@
 	overflow-x: hidden;
 }
 
-
+#post-form-block {
+	padding:10px 10px 0 10px; 
+}
 
 .button-align {
 	text-align:right;
@@ -30,12 +32,14 @@
 }
 
 .post-content {
-	padding:0 0 15px 55px;
+	padding:0 0 5px 0;
 }
 
 .post-body {
 	font-size:1.1em;
 	padding-top:5px;
+	word-wrap:break-word;
+	clear:both;
 }
 
 .comment {
@@ -59,6 +63,10 @@
 	font-size:0.9em;
 }
 
+.comment-body {
+	word-wrap:break-word;
+}
+
 .edit-comment {
 	display: none;
 }
@@ -74,6 +82,78 @@
 form {
     display: inline;
 }
+
+.post-image-thumbnail-container {
+	background-color:#95A5A6 
+}
+
+a:hover .extra-image-thumbnail {
+	opacity: 0.1;
+}
+
+.extra-image-thumbnail {
+	opacity: 0.2;
+}
+
+a:hover .extra-image-thumbnail-text {
+	text-decoration:none;
+}
+
+.extra-image-thumbnail-text {
+	position:absolute;
+	bottom:5px;right:5px;
+	font-size:1.3em;
+}
+
+
+
+
+
+/* FILE INPUTS *******************/
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+
+
+/*	CROPIT			*/
+
+.cropit-preview {
+  background-color: #f8f8f8;
+  background-size: cover;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin: 0 auto;
+  width: 80vw;
+  height: 60vw;
+  max-width: 400px;
+  max-height: 300px;
+}
+.cropit-preview-image-container {
+  cursor: move;
+}
+.image-size-label {
+  margin-top: 10px;
+}
+
+
 
 
 

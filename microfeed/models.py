@@ -13,6 +13,11 @@ class TimeStampedModel(models.Model):
 class Post(TimeStampedModel):
     uid         = models.IntegerField()
     body        = models.TextField(max_length=1000)
+    
+class PostImage(TimeStampedModel):
+    post        = models.ForeignKey("Post", on_delete=models.CASCADE)
+    image_name  = models.CharField(max_length=30)
+    order       = models.IntegerField()
 
     
 class PostView(TimeStampedModel):
