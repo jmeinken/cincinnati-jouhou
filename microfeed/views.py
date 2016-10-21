@@ -19,47 +19,16 @@ def home(request):
 
 @csrf_exempt
 def get_posts(request):
-    uid = int( request.GET.get('uid') )
+    currentUid = int( request.GET.get('uid') )
     last_post_id = int( request.GET.get('last_post_id') )
     post_count = int( request.GET.get('post_count') )
     if last_post_id == 0:
-        qPostView = models.PostView.objects.all()[:post_count]
+        qPost = models.Post.objects.all().order_by('-created')[:post_count]
     else:
-        qPostView = models.PostView.objects.all().filter(id__lt=last_post_id)[:post_count]
+        qPost = models.Post.objects.all().filter(id__lt=last_post_id).order_by('-created')[:post_count]
     response = []
-    for oPostView in qPostView:
-        x = {}
-        x['postId'] = oPostView.id
-        x['uid'] = oPostView.uid
-        x['username'] = oPostView.username
-        x['userImage'] = oPostView.user_image
-        x['body'] = oPostView.body
-        x['date'] = pretty.date( localtime( oPostView.created ).replace(tzinfo=None) )
-        if oPostView.uid == uid:
-            x['editable'] = True
-        else:
-            x['editable'] = False
-        # append comments
-        x['comments'] = []
-        qCommentView = models.CommentView.objects.all().filter(post_id=oPostView.id)
-        for oCommentView in qCommentView:
-            comment = {
-                'commentId' : oCommentView.id,
-                'uid' : oCommentView.uid,
-                'username' : oCommentView.username,
-                'userImage' : oCommentView.user_image,
-                'body' : oCommentView.body,
-                'date' : pretty.date( localtime( oCommentView.created ).replace(tzinfo=None) ),
-            }
-            if oCommentView.uid == uid:
-                comment['editable'] = True
-            else:
-                comment['editable'] = False
-            x['comments'].append(comment)
-        x['images'] = []
-        qPostImage = models.PostImage.objects.all().filter(post_id=oPostView.id)
-        for oPostImage in qPostImage:
-            x['images'].append('/static/uploads/post_images/' + oPostImage.image_name)
+    for oPost in qPost:
+        x = oPost.objectify(currentUid)
         response.append(x)
     return HttpResponse(json.dumps(response), content_type = "application/json")
 
@@ -70,10 +39,10 @@ def get_post(request, post_id):
 
 @csrf_exempt
 def new_post(request):
-    uid = int( request.POST.get('uid') )
+    currentUid = int( request.POST.get('uid') )
     images = request.POST.getlist('images[]')
     body = functions.process_post_body( request.POST.get('body') )
-    oPost = models.Post(uid=uid,body=body)
+    oPost = models.Post(user_id=currentUid,body=body)
     oPost.save()
     if images:
         i = 1
@@ -86,21 +55,7 @@ def new_post(request):
             oPostImage = models.PostImage(post=oPost,image_name=file_name,order=i)
             oPostImage.save()
             i = i + 1
-    # options = json.loads( request.POST.get('options') )
-    oPostView = models.PostView.objects.all().get(id=oPost.id)
-    x = {}
-    x['postId'] = oPostView.id
-    x['uid'] = oPostView.uid
-    x['username'] = oPostView.username
-    x['userImage'] = oPostView.user_image
-    x['body'] = oPostView.body
-    x['date'] = pretty.date( localtime( oPostView.created ).replace(tzinfo=None) )
-    x['test'] = image
-    if oPostView.uid == uid:
-        x['editable'] = True
-    else:
-        x['editable'] = False
-    response = x
+    response = oPost.objectify(currentUid)
     return HttpResponse(json.dumps(response), content_type = "application/json")
 
 @csrf_exempt
@@ -108,22 +63,9 @@ def new_comment(request):
     post_id = int( request.POST.get('post_id') )
     uid = int( request.POST.get('uid') )
     body = functions.process_comment_body( request.POST.get('body') )
-    oComment = models.Comment(uid=uid,body=body,post_id=post_id)
+    oComment = models.PostComment(user_id=uid,body=body,post_id=post_id)
     oComment.save()
-    oCommentView = models.CommentView.objects.all().get(id=oComment.id)
-    response = {
-        'commentId' : oCommentView.id,
-        'postId' : oCommentView.post_id,
-        'uid' : oCommentView.uid,
-        'username' : oCommentView.username,
-        'userImage' : oCommentView.user_image,
-        'body' : oCommentView.body,
-        'date' : pretty.date( localtime( oCommentView.created ).replace(tzinfo=None) )
-    }
-    if oCommentView.uid == uid:
-        response['editable'] = True
-    else:
-        response['editable'] = False
+    response = oComment.objectify(uid)
     return HttpResponse(json.dumps(response), content_type = "application/json")
 
 
@@ -134,15 +76,7 @@ def edit_post(request):
     oPost = models.Post.objects.all().get(id=post_id)
     oPost.body = body
     oPost.save()
-    oPostView = models.PostView.objects.all().get(id=oPost.id)
-    x = {}
-    x['postId'] = oPostView.id
-    x['uid'] = oPostView.uid
-    x['username'] = oPostView.username
-    x['userImage'] = oPostView.user_image
-    x['body'] = oPostView.body
-    x['date'] = pretty.date( localtime( oPostView.created ).replace(tzinfo=None) )
-    response = x
+    response = oPost.objectify(oPost.user.id)
     return HttpResponse(json.dumps(response), content_type = "application/json")
 
 @csrf_exempt
@@ -160,24 +94,16 @@ def delete_post(request):
 def edit_comment(request):
     comment_id = int( request.POST.get('comment_id') )
     body = request.POST.get('body').replace('\n', '<br />')
-    oComment = models.Comment.objects.all().get(id=comment_id)
+    oComment = models.PostComment.objects.all().get(id=comment_id)
     oComment.body = body
     oComment.save()
-    oCommentView = models.CommentView.objects.all().get(id=oComment.id)
-    x = {}
-    x['commentId'] = oCommentView.id
-    x['uid'] = oCommentView.uid
-    x['username'] = oCommentView.username
-    x['userImage'] = oCommentView.user_image
-    x['body'] = oCommentView.body
-    x['date'] = pretty.date( localtime( oCommentView.created ).replace(tzinfo=None) )
-    response = x
+    response = oComment.objectify(oComment.user.id)
     return HttpResponse(json.dumps(response), content_type = "application/json")
 
 @csrf_exempt
 def delete_comment(request):
     comment_id = int( request.POST.get('comment_id') )
-    oComment = models.Comment.objects.all().get(id=comment_id)
+    oComment = models.PostComment.objects.all().get(id=comment_id)
     oComment.delete()
     response = {
         'commentId' : comment_id        

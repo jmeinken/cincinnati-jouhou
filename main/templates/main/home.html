@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
 
-	mf.uid = 1;
+	mf.uid = {{user.id}};
 	mf.subfolder = "";
 
 </script>
@@ -18,7 +18,10 @@
 
 
 <div class="row">
-	<div class="col-sm-12">
+	<div class="col-sm-3">
+		<a href="{% url 'pages:list' 'restaurant' %}">restaurant</a>
+	</div>
+	<div class="col-sm-6">
 		<div id="microfeed-container"></div>
 	</div>
 </div>
@@ -28,13 +31,13 @@
 
 <script type="text/template" id="post-form-login-template">
 	<div class="alert alert-info">
-		Please <a href="/drupal/user">login</a> to post.
+		Please <a href="{% url 'login' %}" class="alert-link">login</a> or <a href="" class="alert-link">create an account</a> to post.
 	</div>
 </script>
 
 <script type="text/template" id="comment-form-login-template">
 	<div style="font-size:0.9em;font-style: italic;text-align:center;">
-		<a href="/drupal/user">login</a> to comment
+		<span class="text-muted"><a href="{% url 'login' %}">login</a> to comment</span>
 	</div>
 </script>
 

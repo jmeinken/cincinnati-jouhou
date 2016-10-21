@@ -21,3 +21,4 @@ def process_comment_body(value):
     value = value.replace(' www.', ' http://www.')
     value = replace_url_to_link(value)
     return value
+

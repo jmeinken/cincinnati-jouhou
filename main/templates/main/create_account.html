@@ -1,0 +1,93 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}\
+{% load static %}
+
+{% block content %}
+
+<script>
+	$( document ).ready(function() {
+		
+		
+		// add selected image from cropit
+		$('#add-image-btn').click(function() {
+			imageUri = $('.image-editor').cropit('export');
+			$('#id_image').val(imageUri);
+			$('#user-image-preview').attr('src', imageUri);
+			$('#add-image-modal').modal('hide');
+		});
+		
+		
+		
+		//configure CROPIT
+        $('.image-editor').cropit({
+        	exportZoom : 1,
+        	maxZoom : 5,
+        	minZoom : 'fill',
+        	smallImage : 'allow'
+        });
+        $('.rotate-cw').click(function() {
+        	$('.image-editor').cropit('rotateCW');
+        });
+        $('.rotate-ccw').click(function() {
+    		$('.image-editor').cropit('rotateCCW');
+        });
+        $('.export').click(function() {
+        	var imageData = $('.image-editor').cropit('export');
+        	window.open(imageData);
+        });
+        
+        
+        
+	});
+	
+</script>
+
+<h2>Create New Account</h2>
+
+<form method="POST">
+	{% crispy fUser %}
+	<br><br>
+	<button type="submit" class="btn btn-primary">Create Account</button>
+</form>
+
+	
+
+	<div class="modal" id="add-image-modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Add Image</h4>
+				</div>
+				<div class="modal-body">
+					<div class="image-editor">
+						<div style="text-align:center;margin-bottom:10px;">
+							<label class="btn btn-default btn-file cropit-image-input">
+								select image <input type="file" class="cropit-image-input" style="display: none;">
+							</label>
+							<button class="rotate-ccw btn btn-default"><i class="fa fa-undo" aria-hidden="true"></i></button>
+							<button class="rotate-cw btn btn-default"><i class="fa fa-repeat" aria-hidden="true"></i></button>
+						</div>
+						<div class="cropit-preview cropit-preview-square"></div>
+						<div style="clear:both; overflow:hidden;margin-top:5px;">
+							<div style="float:right;">
+								<i class="fa fa-picture-o fa-2x" aria-hidden="true"></i>
+							</div>
+							<div style="padding-top:8px;">
+								<i class="fa fa-picture-o" aria-hidden="true"></i>
+							</div>
+						</div>
+						<input type="range" class="cropit-image-zoom-input">
+						
+						<!--<button class="export">Export</button>-->
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-success" id="add-image-btn">Add Image</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

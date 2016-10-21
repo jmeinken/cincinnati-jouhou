@@ -6,13 +6,13 @@
 			<div id="post-[[postId]]">
   				<div class="post-user-image">
 					<img  alt="[[username]]" width=50 height=50
-						src="http://johnmeinken.com/drupal/sites/default/files/styles/thumbnail/public/pictures/[[userImage]]">
+						src="[[userImage]]">
 				</div>
 				<div id="post-user-options-[[postId]]" class="post-user-options"></div>
   				<div class="post-content">
 					<div class="post-meta">
-						| <a href="">[[username]]</a><br>
-						<span class="text-muted"> | [[date]]</span>
+						<span class="text-success">[[username]]</span><br>
+						<span class="text-muted">[[date]]</span>
 					</div>
     				<div id="post-body-[[postId]]" class="post-body">
 						[[body]]
@@ -60,12 +60,12 @@
     		<div id="comment-[[commentId]]" class="comment">
   				<div class="comment-user-image">
 					<img  alt="[[username]]" width=40 height=40
-						src="http://johnmeinken.com/drupal/sites/default/files/styles/thumbnail/public/pictures/[[userImage]]">
+						src="[[userImage]]">
 				</div>
 				<div id="comment-user-options-[[commentId]]" class="comment-user-options"></div>
 				<div class="comment-content">
 					<div class="comment-meta">
-						<a href="">[[username]]</a>
+						<span class="text-success">[[username]]</span>
 						<span class="text-muted"> | [[date]]</span>
 					</div>
    		 			<div id="comment-body-[[commentId]]" class="comment-body">
@@ -139,7 +139,7 @@
 			<div id="new-post-image-block" style="clear:both; overflow:hidden;background-color:black;"></div>
 			<div style="text-align:right;padding:3px 0;border-bottom:#B0B0B0 1px solid ">
 				<button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#add-image-modal">Attach an Image</button>
-				<button type="submit" class="btn btn-sm btn-primary">Share</button>
+				<button type="submit" id="new-post-btn" class="btn btn-sm btn-primary">Share</button>
 			</div>
 		</form>
 	</script>
@@ -168,7 +168,9 @@
 		<div class="row" style="margin:0 -5px 15px -5px;background-color:black;padding:5px;">
 			<div class="col-sm-6 col-sm-offset-3" style="padding:5px">
 				<div class="post-image-thumbnail-container">
-					<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image1]]" />
+					<a href="#" class="show-post-image-modal" data-post-id="[[postId]]">
+						<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image1]]" />
+					</a>
 				</div>
 			</div>
 		</div>
@@ -179,12 +181,16 @@
 		<div class="row" style="margin:0 -5px 15px -5px;background-color:black;padding:5px;">
 			<div class="col-xs-6" style="padding:5px">
 				<div class="post-image-thumbnail-container">
-					<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image1]]" />
+					<a href="#" class="show-post-image-modal" data-post-id="[[postId]]">
+						<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image1]]" />
+					</a>
 				</div>
 			</div>
 			<div class="col-xs-6" style="padding:5px">
 				<div class="post-image-thumbnail-container">
-					<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image2]]" />
+					<a href="#" class="show-post-image-modal" data-post-id="[[postId]]">
+						<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image2]]" />
+					</a>
 				</div>
 			</div>
 		</div>
@@ -194,16 +200,22 @@
 		<div class="row" style="margin:0 -5px 15px -5px;background-color:black;padding:5px;">
 			<div class="col-xs-8" style="padding:5px">
 				<div class="post-image-thumbnail-container">
-					<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image1]]" />
+					<a href="#" class="show-post-image-modal" data-post-id="[[postId]]">
+						<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image1]]" />
+					</a>
 				</div>
 			</div>
 			<div class="col-xs-4" style="padding:5px">
 				<div class="post-image-thumbnail-container">
-					<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image2]]" />
+					<a href="#" class="show-post-image-modal" data-post-id="[[postId]]">
+						<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image2]]" />
+					</a>
 				</div>
 				<div style="padding-bottom:7px;"></div>
 				<div class="post-image-thumbnail-container">
-					<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image3]]" />
+					<a href="#" class="show-post-image-modal" data-post-id="[[postId]]">
+						<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image3]]" />
+					</a>
 				</div>
 			</div>
 		</div>
@@ -213,20 +225,20 @@
 		<div class="row" style="margin:0 -5px 15px -5px;background-color:black;padding:5px;">
 			<div class="col-xs-8" style="padding:5px">
 				<div class="post-image-thumbnail-container">
-					<a href="[[image1]]">
+					<a href="#" class="show-post-image-modal" data-post-id="[[postId]]">
 						<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image1]]" />
 					</a>
 				</div>
 			</div>
 			<div class="col-xs-4" style="padding:5px">
 				<div class="post-image-thumbnail-container">
-					<a href="[[image2]]">
+					<a href="#" class="show-post-image-modal" data-post-id="[[postId]]">
 						<img class="img-responsive post-image-thumbnail-lg" alt="thumbnail" src="[[image2]]" />
 					</a>
 				</div>
 				<div style="padding-bottom:7px;"></div>
 				<div class="post-image-thumbnail-container" style="background-color:white;position:relative;">
-					<a href="[[image3]]">
+					<a href="#" class="show-post-image-modal" data-post-id="[[postId]]">
 						<img class="img-responsive extra-image-thumbnail" alt="thumbnail" src="[[image3]]"
 								style="" />
 						<div class="extra-image-thumbnail-text">
@@ -314,6 +326,26 @@
 					<div class="modal-footer">
 					  	<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 					  	<button type="button" class="btn btn-success" id="add-image-btn">Add Image</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal" id="post-images-modal">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+					  	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					  	<h4 class="modal-title"></h4>
+					</div>
+					<div class="modal-body" style="position:relative;">
+					  	<img class="img-responsive center-block" src="" id="post-images-modal-image" />
+						<a href="#" id="post-images-scroll-backward" style="position:absolute;left:5px;top:45%">
+							<i class="fa fa-chevron-circle-left fa-3x" aria-hidden="true"></i>
+						</a>
+						<a href="#" id="post-images-scroll-forward" style="position:absolute;right:5px;top:45%">
+							<i class="fa fa-chevron-circle-right fa-3x" aria-hidden="true"></i>
+						</a>
 					</div>
 				</div>
 			</div>

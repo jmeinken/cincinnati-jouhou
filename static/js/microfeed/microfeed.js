@@ -17,6 +17,10 @@ mf.lastPostId = 0;
 mf.subfolder = "/feed";
 mf.images = [];
 
+mf.postImages = {}
+mf.currentPostImageIndex = 0;
+mf.currentPostImages = 0;
+
 /// UTILITIES /////////////////////////////////////////////////////////////////////////////////
 
 mf.templateEngine = function (templateId, args) {
@@ -39,6 +43,101 @@ mf.currentDirPath = function() {
 	var str = mf_script.src;
 	console.log(str.substring(0, str.lastIndexOf("/")));
 	return str.substring(0, str.lastIndexOf("/"));
+}
+
+/// FUNCTIONS //////////////////////////////////////////////////////////////////////////////////
+
+mf.displayPost = function(objPost, order) {
+	//console.log(json.test);
+	var args = objPost;  //postId, uid, username, userImage, body
+	args.currentUid = mf.uid
+	var result = mf.templateEngine('post-template', args);
+	if (order == 'top') {
+		$('#output').prepend(result);
+	} else {
+		$('#output').append(result);
+	}
+	var result = mf.templateEngine('comment-form-template', args);
+	$('#comment-form-block-'+args.postId).append(result);
+	//append post options
+	var postUserOptionsStr = mf.templateEngine('post-user-options-template', args);
+	if (args.editable) {
+		$('#post-user-options-'+args.postId).html(postUserOptionsStr);
+	}
+	//append images
+	var imageCount = objPost.images.length
+	mf.postImages[objPost.postId] = objPost.images
+	if (imageCount == 1) {
+		args2 = {
+			postId : objPost.postId,
+			image1 : objPost.images[0]
+		}
+		var result2 = mf.templateEngine('post-image-thumbnails-template-1', args2);
+		$('#post-image-thumbnails-block-'+args.postId).append(result2);
+	}
+	if (imageCount == 2) {
+		args2 = {
+			postId : objPost.postId,
+			image1 : objPost.images[0],
+			image2 : objPost.images[1]
+		}
+		var result2 = mf.templateEngine('post-image-thumbnails-template-2', args2);
+		$('#post-image-thumbnails-block-'+args.postId).append(result2);
+	}
+	if (imageCount == 3) {
+		args2 = {
+			postId : objPost.postId,
+			image1 : objPost.images[0],
+			image2 : objPost.images[1],
+			image3 : objPost.images[2],
+		}
+		var result2 = mf.templateEngine('post-image-thumbnails-template-3', args2);
+		$('#post-image-thumbnails-block-'+args.postId).append(result2);
+	}
+	if (imageCount >= 4) {
+		args2 = {
+			postId : objPost.postId,
+			image1 : objPost.images[0],
+			image2 : objPost.images[1],
+			image3 : objPost.images[2],
+			extra : imageCount - 2
+		}
+		var result2 = mf.templateEngine('post-image-thumbnails-template-4', args2);
+		$('#post-image-thumbnails-block-'+args.postId).append(result2);
+	}
+	// append comments
+	var commentCount = objPost.comments.length
+	if (commentCount > 4) {
+		var hiddenCommentBlock = mf.templateEngine('hidden-comments-template', args);
+		//alert(result2);
+		$('#comments-'+objPost.postId).append(hiddenCommentBlock);
+		for (var j=0; j<commentCount; j++) {
+			var args2 = objPost.comments[j];
+			var result2 = mf.templateEngine('comment-template', args2);
+			if (j < commentCount-3) {
+				$('#hidden-comments-block-'+objPost.postId).append(result2);
+			} else {
+				$('#comments-'+objPost.postId).append(result2);
+			}
+			//append comment options
+			var commentUserOptionsStr = mf.templateEngine('comment-user-options-template', args2);
+			if (objPost.comments[j].editable) {
+				$('#comment-user-options-'+objPost.comments[j].commentId).html(commentUserOptionsStr);
+			}
+		}
+	} else {
+		for (var j=0; j<commentCount; j++) {
+			var args2 = objPost.comments[j];
+			var result2 = mf.templateEngine('comment-template', args2);
+			$('#comments-'+objPost.postId).append(result2);
+			//append comment options
+			var commentUserOptionsStr = mf.templateEngine('comment-user-options-template', args2);
+			if (objPost.comments[j].editable) {
+				$('#comment-user-options-'+objPost.comments[j].commentId).html(commentUserOptionsStr);
+			}
+		}
+	}
+	
 }
 
 
@@ -79,6 +178,51 @@ mf.appendImageEvents = function() {
 		var index = $(this).attr('data-image-index');
 		mf.images.splice(index, 1);
 		$('#image-preview-'+index).remove();
+	});
+	
+	$('.show-post-image-modal').unbind();
+	$('.show-post-image-modal').click(function() {
+		var postId = $(this).attr('data-post-id');
+		mf.currentPostImages = mf.postImages[postId];
+		mf.currentPostImageIndex = 0;
+		var count = mf.currentPostImages.length;
+		$('#post-images-modal .modal-title').html('1 / '+count);
+		$('#post-images-modal-image').attr('src',mf.postImages[postId][0]);
+		$('#post-images-modal').modal('show');
+		$('#post-images-scroll-backward').hide();
+		if (count > 1) {
+			$('#post-images-scroll-forward').show();
+		} else {
+			$('#post-images-scroll-forward').hide();
+		}
+	});
+	
+	$('#post-images-scroll-backward').unbind();
+	$('#post-images-scroll-backward').click(function() {
+		mf.currentPostImageIndex--;
+		var count = mf.currentPostImages.length;
+		$('#post-images-modal .modal-title').html(mf.currentPostImageIndex+1 + ' / ' + count);
+		$('#post-images-modal-image').attr('src',mf.currentPostImages[mf.currentPostImageIndex]);
+		$('#post-images-scroll-forward').show();
+		if (mf.currentPostImageIndex > 0) {
+			$('#post-images-scroll-backward').show();
+		} else {
+			$('#post-images-scroll-backward').hide();
+		}
+	});
+	
+	$('#post-images-scroll-forward').unbind();
+	$('#post-images-scroll-forward').click(function() {
+		mf.currentPostImageIndex++;
+		var count = mf.currentPostImages.length;
+		$('#post-images-modal .modal-title').html(mf.currentPostImageIndex+1 + ' / ' + count);
+		$('#post-images-modal-image').attr('src',mf.currentPostImages[mf.currentPostImageIndex]);
+		$('#post-images-scroll-backward').show();
+		if (count > mf.currentPostImageIndex+1) {
+			$('#post-images-scroll-forward').show();
+		} else {
+			$('#post-images-scroll-forward').hide();
+		}
 	});
 	
 }
@@ -202,7 +346,10 @@ mf.appendPostEvents = function() {
 	
 	$('#new-post-form').unbind();
 	$("#new-post-form").submit(function(e) {
-		
+		$('#new-post-btn')
+			.attr('disabled','disabled')
+			.addClass('disabled')
+			.html('<i class="fa fa-spinner fa-pulse fa-fw"></i> Uploading');
 		var data = $("#new-post-form").serialize();		// uid, body, images[]
 		var url = mf.subfolder + "/microfeed/posts/new";
 		$.ajax({
@@ -211,19 +358,13 @@ mf.appendPostEvents = function() {
 			type: "POST",
 			dataType : "json"
 		}).done(function( json ) {
-			console.log(json.test);
-			var args = json;  //postId, uid, username, userImage, body
-			args.currentUid = mf.uid
-			var result = mf.templateEngine('post-template', args);
-			$('#output').prepend(result);
-			var result = mf.templateEngine('comment-form-template', args);
-			$('#comment-form-block-'+args.postId).append(result);
-			//append post options
-			var postUserOptionsStr = mf.templateEngine('post-user-options-template', args);
-			if (args.editable) {
-				$('#post-user-options-'+args.postId).html(postUserOptionsStr);
-			}
+			mf.displayPost(json, 'top');
 			$("#new-post-form textarea[name=body]").val('');
+			$('#new-post-image-block').html('');
+			$('#new-post-btn')
+				.removeAttr('disabled')
+				.removeClass('disabled')
+				.html('Share');
 			mf.appendEvents();
 		}).fail(function( xhr, status, errorThrown ) {
 			$('#search_status').html('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>');
@@ -331,95 +472,14 @@ mf.loadPosts = function() {
 		dataType : "json"
 	}).done(function( json ) {
 		for (var i=0; i<json.length; i++) {
-			var args = json[i];  //postId, uid, username, userImage, body, comments, images
-			console.log(json[i].images)
-			args.currentUid = mf.uid
-			var result = mf.templateEngine('post-template', args);
-			$('#output').append(result);
-			if (mf.uid != 0) {
-				var result = mf.templateEngine('comment-form-template', args);
-				$('#comment-form-block-'+args.postId).append(result);
-			} else {
-				var result = mf.templateEngine('comment-form-login-template', {});
-				$('#comment-form-block-'+args.postId).append(result);
-			}
-			//append post options
-			var postUserOptionsStr = mf.templateEngine('post-user-options-template', args);
-			if (json[i].editable) {
-				$('#post-user-options-'+json[i].postId).html(postUserOptionsStr);
-			}
-			// append images
-			var imageCount = json[i].images.length
-			if (imageCount == 1) {
-				args2 = {
-					image1 : json[i].images[0]
-				}
-				var result2 = mf.templateEngine('post-image-thumbnails-template-1', args2);
-				$('#post-image-thumbnails-block-'+args.postId).append(result2);
-			}
-			if (imageCount == 2) {
-				args2 = {
-					image1 : json[i].images[0],
-					image2 : json[i].images[1]
-				}
-				var result2 = mf.templateEngine('post-image-thumbnails-template-2', args2);
-				$('#post-image-thumbnails-block-'+args.postId).append(result2);
-			}
-			if (imageCount == 3) {
-				args2 = {
-					image1 : json[i].images[0],
-					image2 : json[i].images[1],
-					image3 : json[i].images[2],
-				}
-				var result2 = mf.templateEngine('post-image-thumbnails-template-3', args2);
-				$('#post-image-thumbnails-block-'+args.postId).append(result2);
-			}
-			if (imageCount == 4) {
-				args2 = {
-					image1 : json[i].images[0],
-					image2 : json[i].images[1],
-					image3 : json[i].images[2],
-					extra : imageCount - 2
-				}
-				var result2 = mf.templateEngine('post-image-thumbnails-template-4', args2);
-				$('#post-image-thumbnails-block-'+args.postId).append(result2);
-			}
-			// append comments
-			var commentCount = json[i].comments.length
-			if (commentCount > 4) {
-				var hiddenCommentBlock = mf.templateEngine('hidden-comments-template', args);
-				//alert(result2);
-				$('#comments-'+json[i].postId).append(hiddenCommentBlock);
-				for (var j=0; j<commentCount; j++) {
-					var args2 = json[i].comments[j];
-					var result2 = mf.templateEngine('comment-template', args2);
-					if (j < commentCount-3) {
-						$('#hidden-comments-block-'+json[i].postId).append(result2);
-					} else {
-						$('#comments-'+json[i].postId).append(result2);
-					}
-					//append comment options
-					var commentUserOptionsStr = mf.templateEngine('comment-user-options-template', args2);
-					if (json[i].comments[j].editable) {
-						$('#comment-user-options-'+json[i].comments[j].commentId).html(commentUserOptionsStr);
-					}
-				}
-			} else {
-				for (var j=0; j<commentCount; j++) {
-					var args2 = json[i].comments[j];
-					var result2 = mf.templateEngine('comment-template', args2);
-					$('#comments-'+json[i].postId).append(result2);
-					//append comment options
-					var commentUserOptionsStr = mf.templateEngine('comment-user-options-template', args2);
-					if (json[i].comments[j].editable) {
-						$('#comment-user-options-'+json[i].comments[j].commentId).html(commentUserOptionsStr);
-					}
-				}
-			}
+			//var args = json[i];  //postId, uid, username, userImage, body, comments, images
+			//console.log(json[i].images)
+			//args.currentUid = mf.uid;
+			mf.displayPost(json[i], 'bottom');		
 		}
 		$('#show-more-posts-block').remove();
 		if (json.length == 10) {
-			var result = mf.templateEngine('more-posts-template', args);
+			var result = mf.templateEngine('more-posts-template', {});
 			$('#output').append(result);
 			mf.lastPostId = json[9].postId;
 		}

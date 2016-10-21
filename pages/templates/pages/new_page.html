@@ -1,0 +1,49 @@
+{% extends "core/base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<script type="text/javascript">
+    $(function() {
+    	{% for child in children %}
+	        $('.{{child.css_class}}').formset({
+                prefix: '{{ child.prefix }}',
+                deleteCssClass: 'delete-row btn btn-sm btn-danger',
+                deleteText: '<i class="fa fa-times" aria-hidden="true"></i>',
+                addCssClass: 'add-row btn btn-success',
+                addText: '<i class="fa fa-plus" aria-hidden="true"></i>',
+	        });
+        {% endfor %}
+    })
+</script>
+
+<style>
+	.delete-row {
+		margin-top: 1.1em;
+	}
+</style>
+
+
+<div class="row">
+	<div class="col-sm-10 col-sm-offset-1">
+		<form method="post" id="myForm">
+			{% csrf_token %}
+			{{ form|crispy }}
+			<hr>
+			{% for child in children %}
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						{{ child.title }}
+					</div>
+					<div class="panel-body">
+						{% crispy child child.form.helper %}
+					</div>
+				</div>
+			{% endfor %}
+			<hr>
+			<button type="submit">Create</button>
+		</form>
+	</div>
+</div>
+{% endblock %}

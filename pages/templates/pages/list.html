@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+
+	{% for oPage in qPage %}
+		<p>
+			<a href="{% url 'pages:page' oPage.id %}">{{oPage.title}}</a>
+		</p>
+	{% endfor %}
+	
+
+
+{% endblock %}

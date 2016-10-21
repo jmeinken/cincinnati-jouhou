@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-4 col-sm-offset-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Login</h3>
+            </div>
+            <div class="panel-body">
+                <p class="text-primary">Please login with your UC Central ID (6+2) and password.</p>
+                {% if login_error %}
+                    <div class="alert alert-danger">
+                          {{ login_error }}
+                    </div>
+                {% endif %}
+                <form action='' method='POST'>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input class="form-control" type='text' name='username' id='user-id' placeholder='user id'></input>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type='password' name='password' id='pw' placeholder='password'></input>
+                    </div>
+                    <input type='submit' name='submit' class="btn btn-primary"></input>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+
+	<h1>{{oPage.title}}</h1>
+	
+	{{oPage.body|linebreaks}}
+	
+	{% for oLink in oPage.pagelink_set.all %}
+		<a href="{{oLink.url}}">{{oLink.title}}</a><br>
+	{% endfor %}
+	
+	{% for oImage in oPage.pageimage_set.all %}
+		<img src="{% static oImage.get_image_path %}" alt="test" />
+	{% endfor %}
+
+{% endblock %}

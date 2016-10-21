@@ -37,8 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'main',
     'microfeed',
+    'pages'
 ]
 
 MIDDLEWARE = [
@@ -117,14 +119,23 @@ USE_L10N = True
 
 STATIC_URL = '/static/'
 
+LOGIN_URL = '/login'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     '/home/ubuntu/django/feed-env/feed/static/',
 ]
 
+MEDIA_ROOT = '/home/ubuntu/django/feed-env/feed/static/uploads/'
+MEDIA_URL = '/uploads/'
+
 
 # allow image uploads
 DATA_UPLOAD_MAX_MEMORY_SIZE = None
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+
 
 
 
