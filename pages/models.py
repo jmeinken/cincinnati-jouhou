@@ -19,16 +19,27 @@ class TimeStampedModel(models.Model):
         
 class Page(TimeStampedModel):
     RESTAURANT = 'restaurant'
-    LOCAL_DESTINATION = 'local destination'
-    REGIONAL_DESTINATION = 'regional destination'
+    LOCAL_DESTINATION = 'local_destination'
+    REGIONAL_DESTINATION = 'regional_destination'
+    HOUSING = 'housing'
+    SHOPPING = 'shopping'
+    MEDICAL = 'medical'
+    TRANSPORTATION = 'transportation'
+    EDUCATION = 'education'
     CATEGORY_CHOICES = (
         (RESTAURANT, 'restaurant'),
-        (LOCAL_DESTINATION, 'local destination'),
-        (REGIONAL_DESTINATION, 'regional destination'),
+        (LOCAL_DESTINATION, 'local_destination'),
+        (REGIONAL_DESTINATION, 'regional_destination'),
+        (HOUSING, 'housing'),
+        (SHOPPING, 'shopping'),
+        (MEDICAL, 'medical'),
+        (TRANSPORTATION, 'transportation'),
+        (EDUCATION, 'education'),
     )
     
     title           = models.CharField(max_length=255)
     user            = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    teaser          = models.TextField(blank=True, null=True)
     body            = models.TextField()
     address         = models.CharField(max_length=500, blank=True, null=True)
     order           = models.IntegerField(default=0)

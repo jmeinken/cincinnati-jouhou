@@ -18,6 +18,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^tinymce/', include('tinymce.urls')),
     url(r'^microfeed/', include('microfeed.urls')),
     url(r'^pages/', include('pages.urls', namespace="pages")),
     url(r'^', include('main.urls')),

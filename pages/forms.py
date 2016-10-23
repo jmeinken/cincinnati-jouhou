@@ -14,7 +14,10 @@ from . import models
 class PageForm(forms.ModelForm):
     class Meta:
         model = models.Page
-        fields = ['title', 'body','address','order','category']
+        fields = ['category','title','body','teaser','address']
+        widgets = {
+          'body': forms.Textarea(attrs={'rows':25, 'cols':30}),
+        }
  
         
 class PageLinkForm(forms.ModelForm):

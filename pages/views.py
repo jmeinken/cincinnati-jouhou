@@ -1,5 +1,9 @@
+import os
+import json
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from feed.functions import validate_form_with_inlines
 
@@ -7,6 +11,19 @@ from feed.functions import validate_form_with_inlines
 
 from . import models
 from . import forms
+
+uploads_directory = '/home/ubuntu/django/feed-env/feed/static/uploads/'
+
+page_titles = {
+    'restaurant' : 'Restaurants',
+    'local_destination' : 'Local Destinations',
+    'regional_destination' : 'Regional Destinations',
+    'housing' : 'Housing',
+    'shopping' : 'Shopping',
+    'medical' : 'Medical',
+    'transportation' : 'Transportation',
+    'education' : 'Education',
+}
 
 
 def home(request):
@@ -69,6 +86,26 @@ def list(request, category):
     context = {}
     qPage = models.Page.objects.all().filter(category=category)
     context['qPage'] = qPage
+    context['page_title'] = page_titles[category]
     return render(request, 'pages/list.html', context)
+
+@csrf_exempt
+def upload_image(request):
+    context = {}
+    if request.method == 'POST':
+        image = request.POST.get('image')
+        if image:
+            imageArr = image.split(',')
+            i = 0
+            while os.path.exists(uploads_directory + 'page_images/image_' + str(i) + '.png'):
+                i += 1
+            image_name = 'image_' + str(i) + '.png'     # placeholder
+            image_path = '/static/uploads/page_images/' + image_name
+            fh = open(uploads_directory + "page_images/" + image_name, "wb")
+            fh.write(imageArr[1].decode('base64'))
+            fh.close()
+            return HttpResponse(json.dumps(image_path), content_type = "application/json")
+    return HttpResponse(json.dumps('fail'), content_type = "application/json")
+    
 
 

@@ -16,10 +16,11 @@
 
 
 
-
+<h1>Cincinnati Japan Forum Home</h1>
+<hr>
 <div class="row">
 	<div class="col-sm-3">
-		<a href="{% url 'pages:list' 'restaurant' %}">restaurant</a>
+		{% include 'snippets/page_browser.html' %}
 	</div>
 	<div class="col-sm-6">
 		<div id="microfeed-container"></div>

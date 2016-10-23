@@ -80,7 +80,7 @@ def edit_account(request):
                 fh = open(uploads_directory + "user_images/" + file_name, "wb")
                 fh.write(imageArr[1].decode('base64'))
                 fh.close()
-                oProfile = models.Profile.objects.get(user=oUser)
+                oProfile, created = models.Profile.objects.get_or_create(user=oUser)
                 oProfile.image_name = file_name
                 oProfile.save()
             #login user and redirect

@@ -3,17 +3,39 @@
 
 
 {% block content %}
+	
+	<div class="row">
+		<div class="col-sm-12 col-sm-offset-3">
+			
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-sm-3">
+			{% include 'snippets/page_browser.html' %}
+			{% if user.is_staff %}
+				<div style="float:right">
+					<a href="{% url 'pages:edit_page' oPage.id %}" class="btn btn-warning">Edit Page</a>
+				</div>
+			{% endif %}
+		</div>
+		<div class="col-sm-6">
+			<h1>{{oPage.title}}</h1>
+			{{oPage.body|safe}}
+		</div>
+		<div class="col-sm-3 well">
+			<p>LINKS</p>
+			{% for oLink in oPage.pagelink_set.all %}
+				<p><a href="{{oLink.url}}">{{oLink.title}}</a></p>
+			{% endfor %}
+		</div>
+	</div>
 
-	<h1>{{oPage.title}}</h1>
-	
-	{{oPage.body|linebreaks}}
-	
-	{% for oLink in oPage.pagelink_set.all %}
-		<a href="{{oLink.url}}">{{oLink.title}}</a><br>
-	{% endfor %}
-	
-	{% for oImage in oPage.pageimage_set.all %}
-		<img src="{% static oImage.get_image_path %}" alt="test" />
-	{% endfor %}
+
+
+
+
+
+
 
 {% endblock %}
