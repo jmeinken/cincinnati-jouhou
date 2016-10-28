@@ -27,3 +27,13 @@ def validate_form_with_inlines(form, children, post_data, model_instance=False):
     else:
         is_valid = False
     return [form, children, is_valid]
+
+
+
+
+
+
+
+
+
+

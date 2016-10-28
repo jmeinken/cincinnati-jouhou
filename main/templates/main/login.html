@@ -10,7 +10,6 @@
                 <h3 class="panel-title">Login</h3>
             </div>
             <div class="panel-body">
-                <p class="text-primary">Please login with your UC Central ID (6+2) and password.</p>
                 {% if login_error %}
                     <div class="alert alert-danger">
                           {{ login_error }}
@@ -24,8 +23,13 @@
                     <div class="form-group">
                         <input class="form-control" type='password' name='password' id='pw' placeholder='password'></input>
                     </div>
-                    <input type='submit' name='submit' class="btn btn-primary"></input>
+                    <div style="text-align:right;">
+                    	<button type='submit' name='submit' class="btn btn-primary">Login</button>
+                    </div>
                 </form>
+                <hr>
+                <a 
+                <a href="create_account" class="btn btn-default btn-block">Create an Account</a>
             </div>
         </div>
     </div>

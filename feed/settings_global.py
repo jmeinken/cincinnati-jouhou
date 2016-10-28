@@ -136,6 +136,9 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = None
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
+TIME_INPUT_FORMATS = ('%I:%M%p',)
+
+
 
 
 

@@ -4,14 +4,19 @@ from django.contrib.auth import authenticate, login, logout
 # from django.contrib.auth.forms import UserCreationForm
 
 import json
+import datetime
 
 from . import forms
 from . import models
+from microfeed.models import EventPostTime
 
 uploads_directory = '/home/ubuntu/django/feed-env/feed/static/uploads/'
 
 def home(request):
     context = {}
+    now = datetime.datetime.now()
+    upcoming_events = EventPostTime.objects.filter(start_date__gte=now).order_by('start_date', 'start_time')[:3]
+    context['upcoming_events'] = upcoming_events
     return render(request, 'main/home.html', context)
 
 def login_view(request):

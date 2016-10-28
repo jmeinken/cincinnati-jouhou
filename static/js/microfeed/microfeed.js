@@ -14,7 +14,10 @@ mf = {}
 
 mf.uid = 0;				//application needs to set this, otherwise nothing will be editable
 mf.lastPostId = 0;
-mf.subfolder = "/feed";
+mf.postCount = 10;
+mf.showMoreOption = true;
+mf.addPostOption = true;
+mf.subfolder = "";
 mf.images = [];
 
 mf.postImages = {}
@@ -51,18 +54,40 @@ mf.displayPost = function(objPost, order) {
 	//console.log(json.test);
 	var args = objPost;  //postId, uid, username, userImage, body
 	args.currentUid = mf.uid
-	var result = mf.templateEngine('post-template', args);
+	if (args.post_type == 'event') {
+		var result = mf.templateEngine('event-post-template', args);
+	} else {
+		var result = mf.templateEngine('post-template', args);
+	}
 	if (order == 'top') {
 		$('#output').prepend(result);
 	} else {
 		$('#output').append(result);
 	}
-	var result = mf.templateEngine('comment-form-template', args);
+	//append event times
+	if (args.post_type == 'event') {
+		for (var i=0; i<args.times.length; i++) {
+			args1 = {}
+			args1.startDate = args.times[i].startDate
+			args1.timeRange = args.times[i].startTime
+			if (args.times[i].endTime) {
+				args1.timeRange = args.times[i].startTime + ' to ' + args.times[i].endTime
+			}
+			$('#event-times-' + args.postId).append( mf.templateEngine('event-times-template', args1) );
+		}
+	}
+	if (mf.uid != 0) {
+		var result = mf.templateEngine('comment-form-template', args);
+	} else {
+		var result = mf.templateEngine('comment-form-login-template', args);
+	}
 	$('#comment-form-block-'+args.postId).append(result);
 	//append post options
-	var postUserOptionsStr = mf.templateEngine('post-user-options-template', args);
-	if (args.editable) {
-		$('#post-user-options-'+args.postId).html(postUserOptionsStr);
+	if (args.post_type == 'standard') {
+		var postUserOptionsStr = mf.templateEngine('post-user-options-template', args);
+		if (args.editable) {
+			$('#post-user-options-'+args.postId).html(postUserOptionsStr);
+		}
 	}
 	//append images
 	var imageCount = objPost.images.length
@@ -295,7 +320,7 @@ mf.appendCommentEvents = function() {
 			dataType : "json"
 		}).done(function( json ) {
 			var commentId = json.commentId;
-			$('#comment-body-'+commentId).html(json.body);
+			$('#comment-body-'+commentId).html(json.formatted_body);
 			$('#edit-comment-'+commentId).hide();
 			$('#comment-'+commentId).show();
 			mf.appendEvents();
@@ -411,7 +436,7 @@ mf.appendPostEvents = function() {
 			dataType : "json"
 		}).done(function( json ) {
 			var postId = json.postId;
-			$('#post-body-'+postId).html(json.body);
+			$('#post-body-'+postId).html(json.formatted_body);
 			$('#edit-post-'+postId).hide();
 			$('#post-'+postId).show();
 			mf.appendEvents();
@@ -462,7 +487,7 @@ mf.loadPosts = function() {
 	var data = {
 		uid: mf.uid,
 		last_post_id: mf.lastPostId,
-		post_count: 10,
+		post_count: mf.postCount,
 	}
 	var url = mf.subfolder + "/microfeed/posts";
 	$.ajax({
@@ -478,10 +503,12 @@ mf.loadPosts = function() {
 			mf.displayPost(json[i], 'bottom');		
 		}
 		$('#show-more-posts-block').remove();
-		if (json.length == 10) {
-			var result = mf.templateEngine('more-posts-template', {});
-			$('#output').append(result);
-			mf.lastPostId = json[9].postId;
+		if (json.length == mf.postCount) {
+			if (mf.showMoreOption) {
+				var result = mf.templateEngine('more-posts-template', {});
+				$('#output').append(result);
+			}
+			mf.lastPostId = json[mf.postCount-1].postId;
 		}
 		mf.appendEvents();
 	}).fail(function( xhr, status, errorThrown ) {
@@ -507,10 +534,10 @@ $( document ).ready(function() {
 		var result = mf.templateEngine('main-container-template', args);
 		$('#microfeed-container').html(result);
 		// show the post form if the user is logged in
-		if (mf.uid != 0) {
+		if (mf.uid != 0 && mf.addPostOption) {
 			var result = mf.templateEngine('post-form-template', args);
 			$('#post-form-block').html(result);
-		} else {
+		} else if (mf.addPostOption) {
 			var result = mf.templateEngine('post-form-login-template', args);
 			$('#post-form-block').html(result);
 		}

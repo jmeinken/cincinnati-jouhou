@@ -1,9 +1,10 @@
 import os
 import json
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
 
 from feed.functions import validate_form_with_inlines
 
@@ -46,7 +47,8 @@ def new_page(request):
             for child in children:
                 child.instance = oPage
                 child.save()
-            return HttpResponse('thanks')
+            messages.success(request, 'Page successfully added.')
+            return redirect('pages:page', page_id=oPage.id)
     context['form'] = form
     context['children'] = children
     return render(request, 'pages/new_page.html', context)
@@ -66,7 +68,8 @@ def edit_page(request, page_id):
             for child in children:
                 child.instance = oPage
                 child.save()
-            return HttpResponse('thanks')
+            messages.success(request, 'Page successfully edited.')
+            return redirect('pages:page', page_id=oPage.id)
     else:
         temp_children = []
         for child in children:

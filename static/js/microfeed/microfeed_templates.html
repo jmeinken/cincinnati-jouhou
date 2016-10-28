@@ -11,11 +11,11 @@
 				<div id="post-user-options-[[postId]]" class="post-user-options"></div>
   				<div class="post-content">
 					<div class="post-meta">
-						<span class="text-success">[[username]]</span><br>
+						<span class="text-success">posted by [[username]]</span><br>
 						<span class="text-muted">[[date]]</span>
 					</div>
     				<div id="post-body-[[postId]]" class="post-body">
-						[[body]]
+						[[formatted_body]]
 					</div>
 					
 				</div>
@@ -41,6 +41,42 @@
 				</div>
   			</div>
 		</div>
+	</script>
+	
+<script type="text/template" id="event-post-template">
+    	<div id="post-block-[[postId]]" class="post-block">
+			<div id="post-[[postId]]">
+  				<div class="post-user-image">
+					<img  alt="[[username]]" width=50 height=50
+						src="[[userImage]]">
+				</div>
+				<div id="post-user-options-[[postId]]" class="post-user-options"></div>
+  				<div class="post-content">
+					<div class="post-meta">
+						<span class="text-success">posted by [[username]]</span><br>
+						<span class="text-muted">[[date]]</span>
+					</div>
+    				<div id="post-body-[[postId]]" class="post-body">
+						<b>EVENT: <a href="[[editLink]]">[[title]]</a></b><br>
+						<div class="event-times text-muted" id="event-times-[[postId]]" style="margin-bottom:5px;border-bottom:1px solid #DDDDDD"></div>
+						<p>[[formatted_body]]</p>
+					</div>
+				</div>
+				<div id="post-image-thumbnails-block-[[postId]]"></div>
+			</div>
+			<div>
+				<div class="panel panel-default" style="margin-bottom:0;">
+					<div class="panel-footer" style="padding-bottom:3px;">
+						<div id="comments-[[postId]]" class="comments"></div>
+						<div id="comment-form-block-[[postId]]"></div>
+					</div>
+				</div>
+  			</div>
+		</div>
+	</script>
+	
+	<script type="text/template" id="event-times-template">
+		[[startDate]] - [[timeRange]]<br>
 	</script>
 	
 	<script type="text/template" id="comment-form-template">
@@ -69,7 +105,7 @@
 						<span class="text-muted"> | [[date]]</span>
 					</div>
    		 			<div id="comment-body-[[commentId]]" class="comment-body">
-						[[body]]
+						[[formatted_body]]
 					</div>
   				</div>
 			</div>
@@ -126,16 +162,14 @@
 	</script>
 	
 	<script type="text/template" id="main-container-template">
-		<div style="background-color:#95A5A6;padding:1px;">
 			<div id="post-form-block"></div>
 			<div id="output" ></div>
-		</div>
 	</script>
 	
 	<script type="text/template" id="post-form-template">
 		<form id="new-post-form">
 			<input type="hidden" name="uid" value="[[uid]]" />
-			<textarea name="body" class="form-control" rows="4" placeholder="Write a new post..."></textarea>
+			<textarea name="body" class="form-control" rows="4" placeholder="Write something..."></textarea>
 			<div id="new-post-image-block" style="clear:both; overflow:hidden;background-color:black;"></div>
 			<div style="text-align:right;padding:3px 0;border-bottom:#B0B0B0 1px solid ">
 				<button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#add-image-modal">Attach an Image</button>
@@ -351,3 +385,21 @@
 			</div>
 		</div>
 	</script>
+	
+	
+	
+	<script type="text/template" id="post-form-login-template">
+	<div class="alert alert-info">
+		Please <a href="{% url 'login' %}" class="alert-link">login</a> or <a href="{% url 'create_account' %}" class="alert-link">create an account</a> to post.
+	</div>
+</script>
+
+<script type="text/template" id="comment-form-login-template">
+	<div style="font-size:0.9em;font-style: italic;text-align:center;">
+		<span class="text-muted">
+			<a href="{% url 'login' %}">login</a> or 
+			<a href="{% url 'create_account' %}" class="alert-link">create an account</a>
+			to comment
+		</span>
+	</div>
+</script>

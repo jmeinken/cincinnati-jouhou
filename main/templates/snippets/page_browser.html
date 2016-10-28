@@ -1,3 +1,21 @@
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Upcoming Events</h3>
+	</div>
+	<div class="panel-body">
+		{% for time in upcoming_events %}
+			<div style="border-bottom:1px solid #DDDDDD;margin-bottom:10px;">
+				<a href="{% url 'microfeed:view_post' time.event_post.post.id %}">{{time.event_post.title}}</a><br>
+				<span class="text-muted">{{time.start_date}} - {{time.start_time}}</span>
+			</div>
+		{% empty %}
+		<span class="text-muted">none</span>
+		{% endfor %}
+	</div>
+</div>
+
+
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title">To Do</h3>

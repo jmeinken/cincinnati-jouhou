@@ -1,32 +1,50 @@
 {% load staticfiles %}<!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Microfeed</title>
+  <title>Cincinnati Japan Forum</title>
   <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1, user-scalable=no">
+  
+  <!-- jQuery -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  
+  <!-- bootstrap -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.6/yeti/bootstrap.min.css">
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  
+  <!-- font awesome -->
   <link type="text/css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" media="all" />
+  
+  <!-- jQuery TimePicker -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.js"></script>
+  <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css" media="all" />
+  
+  <!-- jQuery UI -->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
+  <!-- cropit picture tool -->
   <script src="{% static 'js/cropit/jquery.cropit.js' %}"></script>
+  
+  <!-- Django formset for inline formsets -->
   <script src="{% static 'js/jquery.formset.js' %}"></script>
 
+  <!-- microfeed (by me) for displaying microfeed items  -->
   <script src="{% static 'js/microfeed/microfeed.js' %}"></script>
   <link rel="stylesheet" href="{% static 'js/microfeed/microfeed.css' %}">
   
+  <!-- TinyMCE for WYSIWYG textareas -->
   <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-  <script>
-  	tinymce.init({ 
-  		selector:'textarea',
-  		plugins: "textcolor, link, image",
-	    toolbar: "bold, italic, underline, alignleft, aligncenter, alignright, alignjustify, fontselect, fontsizeselect, bullist, numlist, blockquote, undo, redo, removeformat, forecolor, backcolor, link" 
-	});
-  </script>
+  
   
 <style>
 	h1, h2, h3 {
   		margin-top: 5px;
+  	}
+  	
+  	.delete-row {
+  		display: inline-block;
+  		margin-top: 12px;
   	}
 </style>
 
@@ -38,11 +56,26 @@
 
 
 
-<div id="content" class="container" style="min-height:75vh;">{% block content %}{% endblock %}</div>
+<div id="content" class="container" style="min-height:75vh;">
+	{% if messages %}
+		{% for message in messages %}
+			<div class="alert alert-dismissible alert-success">
+	  			<button type="button" class="close" data-dismiss="alert">&times;</button>
+	  			{{ message }}
+			</div>
+		{% endfor %}
+	{% endif %}
+	{% block content %}{% endblock %}
+</div>
 
 
-<footer>
-    <img alt="test image" src="{% static 'img/uc.png' %}" width=50 height=50 />
+<footer class="container" style="border-top:solid 1px #b3b3b3; margin:10px auto;padding-top:5px;">
+    <div style="float:right;padding-top:15px;">
+    	<a href="mailto:thebellsofohio@hotmail.com">CONTACT US</a>
+    </div>
+    <div style="font-size:25px; padding-top:15px;">
+    	<a href="https://chi.uc.edu" style="font-style:italic;color:#b3b3b3">&copy; 2016 Cincinnati Japan Forums</a> 
+    </div>
 </footer>
 
 </body>

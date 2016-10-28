@@ -8,7 +8,9 @@
 
 <script type="text/javascript">
 
-	mf.uid = {{user.id}};
+	{% if user.is_authenticated %}
+		mf.uid = {{user.id}};
+	{% endif %}
 	mf.subfolder = "";
 
 </script>
@@ -16,31 +18,28 @@
 
 
 
-<h1>Cincinnati Japan Forum Home</h1>
+<h1>Cincinnati Japan Forum Main Feed</h1>
 <hr>
 <div class="row">
 	<div class="col-sm-3">
 		{% include 'snippets/page_browser.html' %}
 	</div>
-	<div class="col-sm-6">
-		<div id="microfeed-container"></div>
+	<div class="col-sm-7">
+		{% if user.is_authenticated %}
+			<div style="float:right;"><a href="{% url 'microfeed:new_event' %}" class="btn btn-primary">Post an Event</a></div>
+		{% endif %}
+		<div style="background-color:#95A5A6;display:inline-block; padding:10px 12px;">Messages</div>
+		<div style="background-color:#95A5A6;padding:1px;">
+			<div id="microfeed-container"></div>
+		</div>
+		
 	</div>
 </div>
 
 <div id="microfeed-modals"></div>
 <div id="microfeed-templates"></div>
 
-<script type="text/template" id="post-form-login-template">
-	<div class="alert alert-info">
-		Please <a href="{% url 'login' %}" class="alert-link">login</a> or <a href="" class="alert-link">create an account</a> to post.
-	</div>
-</script>
 
-<script type="text/template" id="comment-form-login-template">
-	<div style="font-size:0.9em;font-style: italic;text-align:center;">
-		<span class="text-muted"><a href="{% url 'login' %}">login</a> to comment</span>
-	</div>
-</script>
 
 	
 	
