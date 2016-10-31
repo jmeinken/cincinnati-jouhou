@@ -5,10 +5,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from feed.functions import validate_form_with_inlines
 
-
+from feed import functions
 
 from . import models
 from . import forms
@@ -33,7 +34,7 @@ def home(request):
 
 
 
-
+@login_required
 def new_page(request):
     context = {}
     form = forms.PageForm()
@@ -53,7 +54,16 @@ def new_page(request):
     context['children'] = children
     return render(request, 'pages/new_page.html', context)
 
+@csrf_exempt
+def delete_page(request):
+    page_id = int( request.POST.get('page_id') )
+    oPage = models.Page.objects.all().get(id=page_id)
+    oPage.delete()
+    messages.success(request, 'Page successfully deleted.')
+    return redirect('home')
 
+
+@login_required
 def edit_page(request, page_id):
     context = {}
     oPage = get_object_or_404(models.Page, pk=page_id)
@@ -81,12 +91,14 @@ def edit_page(request, page_id):
 
 def page(request, page_id):
     context = {}
+    context['upcoming_events'] = functions.get_upcoming_events()
     oPage = models.Page.objects.all().get(pk=page_id)
     context['oPage'] = oPage
     return render(request, 'pages/page.html', context)
 
 def list(request, category):
     context = {}
+    context['upcoming_events'] = functions.get_upcoming_events()
     qPage = models.Page.objects.all().filter(category=category)
     context['qPage'] = qPage
     context['page_title'] = page_titles[category]

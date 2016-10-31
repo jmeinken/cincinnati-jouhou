@@ -1,6 +1,7 @@
-
+import datetime
 
 from pages import forms
+from microfeed import models
 
 
 def validate_form_with_inlines(form, children, post_data, model_instance=False):
@@ -27,6 +28,12 @@ def validate_form_with_inlines(form, children, post_data, model_instance=False):
     else:
         is_valid = False
     return [form, children, is_valid]
+
+
+def get_upcoming_events():
+    now = datetime.datetime.now()
+    upcoming_events = models.EventPostTime.objects.filter(start_date__gte=now).order_by('start_date', 'start_time')[:3]
+    return upcoming_events
 
 
 

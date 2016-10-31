@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 # from django.contrib.auth.forms import UserCreationForm
 
 import json
@@ -9,14 +10,13 @@ import datetime
 from . import forms
 from . import models
 from microfeed.models import EventPostTime
+from feed import functions
 
 uploads_directory = '/home/ubuntu/django/feed-env/feed/static/uploads/'
 
 def home(request):
     context = {}
-    now = datetime.datetime.now()
-    upcoming_events = EventPostTime.objects.filter(start_date__gte=now).order_by('start_date', 'start_time')[:3]
-    context['upcoming_events'] = upcoming_events
+    context['upcoming_events'] = functions.get_upcoming_events()
     return render(request, 'main/home.html', context)
 
 def login_view(request):
@@ -64,12 +64,16 @@ def create_account(request):
                 fh.close()
                 oProfile = models.Profile(user=oUser, image_name=file_name)
                 oProfile.save()
+            else:
+                oProfile = models.Profile(user=oUser)
+                oProfile.save()
             #login user and redirect
             login(request, oUser)
             return redirect('home')
     context['fUser'] = fUser
     return render(request, 'main/create_account.html', context)
 
+@login_required
 def edit_account(request):
     context = {}
     fUser = forms.UserChangeForm(instance=request.user)
@@ -89,7 +93,6 @@ def edit_account(request):
                 oProfile.image_name = file_name
                 oProfile.save()
             #login user and redirect
-            login(request, oUser)
             return redirect('home')
     context['fUser'] = fUser
     return render(request, 'main/edit_account.html', context)

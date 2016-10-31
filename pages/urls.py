@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     
     url(r'^new', views.new_page, name='new_page'),
+    url(r'^delete', views.delete_page, name='delete_page'),
     url(r'^edit/(?P<page_id>[0-9]+)', views.edit_page, name='edit_page'),
     url(r'^view/(?P<page_id>[0-9]+)', views.page, name='page'),
     url(r'^list/(?P<category>[a-z_-]+)', views.list, name='list'),

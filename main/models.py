@@ -31,7 +31,7 @@ from django.contrib import admin
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image_name = models.CharField(max_length=30)
+    image_name = models.CharField(max_length=30, blank=True, null=True)
     
     def get_image(self):
         if self.image_name:
