@@ -11,9 +11,7 @@ from django.contrib import messages
 from . import models
 from . import functions
 from . import forms
-
-
-uploads_directory = '/home/ubuntu/django/feed-env/feed/static/uploads/'
+from feed.functions import UPLOADS_DIR
 
 @csrf_exempt
 def home(request):
@@ -114,7 +112,7 @@ def new_post(request):
         for image in images:
             imageArr = image.split(',')
             file_name = 'image_' + str(oPost.id) + '_' + str(i) + '.png'
-            fh = open(uploads_directory + "post_images/" + file_name, "wb")
+            fh = open(UPLOADS_DIR + "post_images/" + file_name, "wb")
             fh.write(imageArr[1].decode('base64'))
             fh.close()
             oPostImage = models.PostImage(post=oPost,image_name=file_name,order=i)

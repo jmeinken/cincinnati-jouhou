@@ -11,8 +11,9 @@ from . import forms
 from . import models
 from microfeed.models import EventPostTime
 from feed import functions
+from feed.functions import UPLOADS_DIR
 
-uploads_directory = '/home/ubuntu/django/feed-env/feed/static/uploads/'
+
 
 def home(request):
     context = {}
@@ -59,7 +60,7 @@ def create_account(request):
             if image:
                 imageArr = image.split(',')
                 file_name = 'image_' + str(oUser.id) + '.png'
-                fh = open(uploads_directory + "user_images/" + file_name, "wb")
+                fh = open(UPLOADS_DIR + "user_images/" + file_name, "wb")
                 fh.write(imageArr[1].decode('base64'))
                 fh.close()
                 oProfile = models.Profile(user=oUser, image_name=file_name)
@@ -86,7 +87,7 @@ def edit_account(request):
             if image:
                 imageArr = image.split(',')
                 file_name = 'image_' + str(oUser.id) + '.png'
-                fh = open(uploads_directory + "user_images/" + file_name, "wb")
+                fh = open(UPLOADS_DIR + "user_images/" + file_name, "wb")
                 fh.write(imageArr[1].decode('base64'))
                 fh.close()
                 oProfile, created = models.Profile.objects.get_or_create(user=oUser)

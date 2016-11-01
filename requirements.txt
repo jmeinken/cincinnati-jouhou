@@ -1,0 +1,7 @@
+Django==1.10.2
+django-crispy-forms==1.6.0
+django-tinymce==2.4.0
+MySQL-python==1.2.5
+Pillow==3.4.2
+py-pretty==1
+pytz==2016.7

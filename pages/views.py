@@ -10,11 +10,11 @@ from django.contrib.auth.decorators import login_required
 from feed.functions import validate_form_with_inlines
 
 from feed import functions
+from feed.functions import UPLOADS_DIR
 
 from . import models
 from . import forms
 
-uploads_directory = '/home/ubuntu/django/feed-env/feed/static/uploads/'
 
 page_titles = {
     'restaurant' : 'Restaurants',
@@ -112,11 +112,11 @@ def upload_image(request):
         if image:
             imageArr = image.split(',')
             i = 0
-            while os.path.exists(uploads_directory + 'page_images/image_' + str(i) + '.png'):
+            while os.path.exists(UPLOADS_DIR + 'page_images/image_' + str(i) + '.png'):
                 i += 1
             image_name = 'image_' + str(i) + '.png'     # placeholder
             image_path = '/static/uploads/page_images/' + image_name
-            fh = open(uploads_directory + "page_images/" + image_name, "wb")
+            fh = open(UPLOADS_DIR + "page_images/" + image_name, "wb")
             fh.write(imageArr[1].decode('base64'))
             fh.close()
             return HttpResponse(json.dumps(image_path), content_type = "application/json")

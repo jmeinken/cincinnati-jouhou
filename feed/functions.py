@@ -4,6 +4,9 @@ from pages import forms
 from microfeed import models
 
 
+UPLOADS_DIR = '/home/ubuntu/django/cincinnati-env/cincinnati-jouhou/static/uploads/'
+
+
 def validate_form_with_inlines(form, children, post_data, model_instance=False):
     """Handles validation of form and all inline children.
     Returns updated form and children if validation passes, false if validation fails.
