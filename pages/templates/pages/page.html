@@ -3,14 +3,37 @@
 
 
 {% block content %}
+
+<ul class="breadcrumb">
+	  <li><a href="{% url 'home' %}">Home</a></li>
+	  <li><a href="{% url 'pages:list' oPage.category %}">{{oPage.category}}</a></li>
+	  <li class="active">{{oPage.title}}</li>
+	</ul>
 	
-	<div class="row">
-		<div class="col-sm-12 col-sm-offset-3">
-			
-		</div>
-	</div>
+	<h1>{{oPage.title}}</h1>
 	<hr>
 	<div class="row">
+		
+		<div class="col-sm-6">
+			
+			{{oPage.body|safe}}
+		</div>
+		<div class="col-sm-3">
+			{% if oPage.pagelink_set.all %}
+				<div class="well">
+					<p>LINKS</p>
+					{% for oLink in oPage.pagelink_set.all %}
+						<p><a href="{{oLink.url}}">{{oLink.title}}</a></p>
+					{% endfor %}
+				</div>
+			{% endif %}
+			{% if oPage.address %}
+				<div class="well">
+					<p>LOCATION</p>
+					<a target="_blank" href="http://maps.google.com/?q={{oPage.address}}">{{oPage.address}}</a>
+				</div>
+			{% endif %}
+		</div>
 		<div class="col-sm-3">
 			{% include 'snippets/page_browser.html' %}
 			{% if user.is_staff %}
@@ -18,18 +41,6 @@
 				<button class="btn btn-danger" data-toggle="modal" data-target="#delete-page-modal">Delete Page</a>
 			{% endif %}
 		</div>
-		<div class="col-sm-6">
-			<h1>{{oPage.title}}</h1>
-			{{oPage.body|safe}}
-		</div>
-		{% if oPage.pagelink_set.all %}
-			<div class="col-sm-3 well">
-				<p>LINKS</p>
-				{% for oLink in oPage.pagelink_set.all %}
-					<p><a href="{{oLink.url}}">{{oLink.title}}</a></p>
-				{% endfor %}
-			</div>
-		{% endif %}
 	</div>
 
 

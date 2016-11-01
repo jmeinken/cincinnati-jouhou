@@ -3,13 +3,16 @@
 
 
 {% block content %}
-	<div class="row">
-		<div class="col-sm-3" style="padding-top:75px;">
-			{% include 'snippets/page_browser.html' %}
-		</div>
-		<div class="col-sm-6">
-			<h1>{{page_title}}</h1>
+	<ul class="breadcrumb">
+	  <li><a href="{% url 'home' %}">Home</a></li>
+	  <li class="active">{{page_title}}</li>
+	</ul>
+	<h1>{{page_title}}</h1>
 			<hr>
+	<div class="row">
+		
+		<div class="col-sm-9">
+			
 			{% for oPage in qPage %}
 				<div class="well">
 					<h2><a href="{% url 'pages:page' oPage.id %}">{{oPage.title}}</a></h2>
@@ -18,10 +21,15 @@
 						{{oPage.teaser|safe}}
 					{% endif %}
 					<div style="text-align:right;">
-						<a href="{% url 'pages:page' oPage.id %}">more...</button>
+						<a href="{% url 'pages:page' oPage.id %}">more...</a>
 					</div>
 				</div>
+			{% empty %}
+				<em>No items have been added yet.</em>
 			{% endfor %}
+		</div>
+		<div class="col-sm-3">
+			{% include 'snippets/page_browser.html' %}
 		</div>
 	</div>
 
