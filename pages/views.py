@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import ugettext as _
 
 from feed.functions import validate_form_with_inlines
 
@@ -17,14 +18,14 @@ from . import forms
 
 
 page_titles = {
-    'restaurant' : 'Restaurants',
-    'local_destination' : 'Local Destinations',
-    'regional_destination' : 'Regional Destinations',
-    'housing' : 'Housing',
-    'shopping' : 'Shopping',
-    'medical' : 'Medical',
-    'transportation' : 'Transportation',
-    'education' : 'Education',
+    'restaurant' : _('Restaurants'),
+    'local_destination' : _('Local Destinations'),
+    'regional_destination' : _('Regional Destinations'),
+    'housing' : _('Housing'),
+    'shopping' : _('Shopping'),
+    'medical' : _('Medical'),
+    'transportation' : _('Transportation'),
+    'education' : _('Education'),
 }
 
 
@@ -48,7 +49,7 @@ def new_page(request):
             for child in children:
                 child.instance = oPage
                 child.save()
-            messages.success(request, 'Page successfully added.')
+            messages.success( request, _('Page successfully added.') )
             return redirect('pages:page', page_id=oPage.id)
     context['form'] = form
     context['children'] = children
@@ -59,7 +60,7 @@ def delete_page(request):
     page_id = int( request.POST.get('page_id') )
     oPage = models.Page.objects.all().get(id=page_id)
     oPage.delete()
-    messages.success(request, 'Page successfully deleted.')
+    messages.success( request, _('Page successfully deleted.') )
     return redirect('home')
 
 
@@ -78,7 +79,7 @@ def edit_page(request, page_id):
             for child in children:
                 child.instance = oPage
                 child.save()
-            messages.success(request, 'Page successfully edited.')
+            messages.success( request, _('Page successfully edited.') )
             return redirect('pages:page', page_id=oPage.id)
     else:
         temp_children = []

@@ -26,7 +26,7 @@ class TimeStampedModel(models.Model):
 
 class Post(TimeStampedModel):
     user        = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    body        = models.TextField(max_length=1000, blank=True, null=True)
+    body        = models.TextField(max_length=3000, blank=True, null=True)
     
     # POST: postId, uid, username, userImage, body, date, editable
     # COMMENTS: commentId, uid, username, userImage, body, date

@@ -18,6 +18,10 @@ def home(request):
     data = "hello world from microfeed"
     return HttpResponse(json.dumps(data), content_type = "application/json")
 
+#def javascript_templates(request):
+#    context = {}
+#    return render(request, 'microfeed/javascript_templates.html', context)
+
 def view_post(request, post_id):
     context = {}
     oPost = get_object_or_404(models.Post, pk=post_id)

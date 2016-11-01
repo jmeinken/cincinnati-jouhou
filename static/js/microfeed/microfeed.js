@@ -523,56 +523,47 @@ mf.loadPosts = function() {
 ////////////////////////////////////////////////
 
 $( document ).ready(function() {
+
+	//load main container
+	args = {
+		uid: mf.uid
+	}
+	var result = mf.templateEngine('main-container-template', args);
+	$('#microfeed-container').html(result);
+	// show the post form if the user is logged in
+	if (mf.uid != 0 && mf.addPostOption) {
+		var result = mf.templateEngine('post-form-template', args);
+		$('#post-form-block').html(result);
+	} else if (mf.addPostOption) {
+		var result = mf.templateEngine('post-form-login-template', args);
+		$('#post-form-block').html(result);
+	}
 	
-	//load templates
-	$('#microfeed-templates').load(mf.currentDirPath()+'/microfeed_templates.html', function() {
+	//load modals
+	args = {}
+	var result = mf.templateEngine('modals-template', args);
+	$('#microfeed-modals').html(result);
 		
-		//load main container
-		args = {
-			uid: mf.uid
-		}
-		var result = mf.templateEngine('main-container-template', args);
-		$('#microfeed-container').html(result);
-		// show the post form if the user is logged in
-		if (mf.uid != 0 && mf.addPostOption) {
-			var result = mf.templateEngine('post-form-template', args);
-			$('#post-form-block').html(result);
-		} else if (mf.addPostOption) {
-			var result = mf.templateEngine('post-form-login-template', args);
-			$('#post-form-block').html(result);
-		}
-		
-		//load modals
-		args = {}
-		var result = mf.templateEngine('modals-template', args);
-		$('#microfeed-modals').html(result);
-			
-		//load first set of posts
-		mf.loadPosts();
-		
-		//configure CROPIT
-        $('.image-editor').cropit({
-        	exportZoom : 2,
-        	maxZoom : 1,
-        	minZoom : 'fit',
-        	smallImage : 'allow'
-        });
-        $('.rotate-cw').click(function() {
-        	$('.image-editor').cropit('rotateCW');
-        });
-        $('.rotate-ccw').click(function() {
-    		$('.image-editor').cropit('rotateCCW');
-        });
-        $('.export').click(function() {
-        	var imageData = $('.image-editor').cropit('export');
-        	window.open(imageData);
-        });
-		
-		
-	});
+	//load first set of posts
+	mf.loadPosts();
 	
-	
-	
+	//configure CROPIT
+    $('.image-editor').cropit({
+    	exportZoom : 2,
+    	maxZoom : 1,
+    	minZoom : 'fit',
+    	smallImage : 'allow'
+    });
+    $('.rotate-cw').click(function() {
+    	$('.image-editor').cropit('rotateCW');
+    });
+    $('.rotate-ccw').click(function() {
+		$('.image-editor').cropit('rotateCCW');
+    });
+    $('.export').click(function() {
+    	var imageData = $('.image-editor').cropit('export');
+    	window.open(imageData);
+    });
 
 });
 

@@ -5,6 +5,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.timezone import localtime
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 
 
 
@@ -37,13 +38,13 @@ class Page(TimeStampedModel):
         (EDUCATION, 'education'),
     )
     
-    title           = models.CharField(max_length=255)
+    title           = models.CharField(max_length=255, verbose_name=_('title'),)
     user            = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    teaser          = models.TextField(blank=True, null=True)
-    body            = models.TextField()
-    address         = models.CharField(max_length=500, blank=True, null=True)
-    order           = models.IntegerField(default=0)
-    category        = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default=RESTAURANT)
+    teaser          = models.TextField(blank=True, null=True, verbose_name=_('teaser'),)
+    body            = models.TextField(verbose_name=_('body'),)
+    address         = models.CharField(max_length=500, blank=True, null=True, verbose_name=_('address'),)
+    order           = models.IntegerField(default=0, verbose_name=_('order'),)
+    category        = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default=RESTAURANT, verbose_name=_('category'),)
     
     def __str__(self):
         return self.title
@@ -65,12 +66,14 @@ class PageImage(TimeStampedModel):
         
 class PageLink(TimeStampedModel):
     page        = models.ForeignKey("Page", on_delete=models.CASCADE)
-    title       = models.CharField(max_length=30, null=True, blank=True)
-    url         = models.CharField(max_length=500)
-    order       = models.IntegerField(default=0)
+    title       = models.CharField(max_length=30, null=True, blank=True, verbose_name=_('title'),)
+    url         = models.CharField(max_length=500, verbose_name=_('url'),)
+    order       = models.IntegerField(default=0, verbose_name=_('order'),)
     
     class Meta:
         ordering = ['order', 'id']
+        verbose_name = _('Page Link')
+        verbose_name_plural = _('Page Links')
  
         
 class PageComment(TimeStampedModel):

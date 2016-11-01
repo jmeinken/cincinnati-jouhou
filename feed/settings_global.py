@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -105,6 +106,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+
+
 TIME_ZONE = 'America/New_York'
 USE_TZ = True
 
@@ -137,6 +140,8 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = None
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 TIME_INPUT_FORMATS = ('%I:%M%p',)
+
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 
 
 

@@ -1,5 +1,5 @@
 {% extends 'core/base.html' %}
-
+{% load i18n %}
 
 {% block content %}
 
@@ -16,17 +16,15 @@
 </script>
 
 
-
-
-<h1>Home</h1>
+<h1>{% trans "Home" %}</h1>
 <hr>
 <div class="row">
 
 	<div class="col-sm-7 col-sm-offset-1">
 		{% if user.is_authenticated %}
-			<div style="float:right;"><a href="{% url 'microfeed:new_event' %}" class="btn btn-primary">Post an Event</a></div>
+			<div style="float:right;"><a href="{% url 'microfeed:new_event' %}" class="btn btn-primary">{% trans 'Post an Event' %}</a></div>
 		{% endif %}
-		<div style="background-color:#95A5A6;display:inline-block; padding:10px 12px;">Messages</div>
+		<div style="background-color:#95A5A6;display:inline-block; padding:10px 12px;">{% trans 'Messages' %}</div>
 		<div style="background-color:#95A5A6;padding:1px;">
 			<div id="microfeed-container"></div>
 		</div>
@@ -37,8 +35,8 @@
 	</div>
 </div>
 
+{% include 'microfeed/snippets/javascript_templates.html' %}
 <div id="microfeed-modals"></div>
-<div id="microfeed-templates"></div>
 
 
 

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.utils import translation
 # from django.contrib.auth.forms import UserCreationForm
 
 import json
@@ -13,10 +14,22 @@ from microfeed.models import EventPostTime
 from feed import functions
 from feed.functions import UPLOADS_DIR
 
+def set_english(request):
+    user_language = 'en-us'
+    request.session[translation.LANGUAGE_SESSION_KEY] = user_language
+    return redirect('home')
 
+def set_japanese(request):
+    user_language = 'ja'
+    request.session[translation.LANGUAGE_SESSION_KEY] = user_language
+    return redirect('home')
 
 def home(request):
     context = {}
+    if not request.session.get(translation.LANGUAGE_SESSION_KEY):
+        user_language = 'ja'
+        request.session[translation.LANGUAGE_SESSION_KEY] = user_language
+        translation.activate(user_language)
     context['upcoming_events'] = functions.get_upcoming_events()
     return render(request, 'main/home.html', context)
 

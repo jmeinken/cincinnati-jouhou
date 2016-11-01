@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <nav class="navbar navbar-inverse">
 	<div class="navbar-header">
 	    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#analyst_tools_navbar" aria-expanded="false">
@@ -8,41 +9,42 @@
 	        <span class="icon-bar"></span>
 	    </button>
 		<a class="navbar-brand" href="{% url 'home' %}">
-	   		Cincinnati J&#333;h&#333;
+	   		{% trans "Cincinnati Jōhō" %}
 		</a>
   	</div>
 
   	<div class="collapse navbar-collapse" id="analyst_tools_navbar">
 		<ul class="nav navbar-nav">
-			<li class="active"><a href="">English</a></li>
-			<li><a href="">日本語</a></li>
+			{% get_current_language as LANGUAGE_CODE %}
+			<li{% if LANGUAGE_CODE == 'ja' %} class="active"{% endif %}><a href="{% url 'set_japanese' %}">日本語</a></li>
+			<li{% if LANGUAGE_CODE == 'en' %} class="active"{% endif %}><a href="{% url 'set_english' %}">English</a></li>
 		</ul>	
 		{% if user.username %}
 	        <ul class="nav navbar-nav navbar-right">
 	            <li class="dropdown user-tools">
 		        	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-		            	<img src="{% static user.profile.get_image %}" height="30" width="30" /> Logged in as {{ user.username }} <span class="caret"></span>
+		            	<img src="{% static user.profile.get_image %}" height="30" width="30" /> {% trans 'Logged in as' %} {{ user.username }} <span class="caret"></span>
 		          	</a>
 		          	<ul class="dropdown-menu" role="menu">
-		          		<li><a href="{% url 'edit_account' %}"><i class="fa fa-cog" aria-hidden="true"></i> Account Settings</a></li>
-		            	<li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
+		          		<li><a href="{% url 'edit_account' %}"><i class="fa fa-cog" aria-hidden="true"></i> {% trans 'Account Settings' %}</a></li>
+		            	<li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> {% trans 'Logout' %}</a></li>
 		          	</ul>
 		        </li>
 	        </ul>
 	    {% else %}
 	    	<ul class="nav navbar-nav navbar-right">
 	            <li>
-	            	<a href="{% url 'create_account' %}">| create account</a>
+	            	<a href="{% url 'create_account' %}">| {% trans 'create account' %}</a>
 		        </li>
 	        </ul>
 	    	<form class="navbar-form navbar-right" method="POST" action="{% url 'login' %}">
 	    		
 		        <div class="form-group">
 		        	{% csrf_token %}
-		            <input class="form-control" name="username" placeholder="username or email" type="text">
-		            <input class="form-control" name="password" placeholder="password" type="password">
+		            <input class="form-control" name="username" placeholder="{%trans 'username or email' %}" type="text">
+		            <input class="form-control" name="password" placeholder="{%trans 'password' %}" type="password">
 		        </div>
-		        <button type="submit" class="btn btn-default btn-sm">login</button>
+		        <button type="submit" class="btn btn-default btn-sm">{% trans 'login' %}</button>
 		    </form>
 		    
 	    {% endif %}

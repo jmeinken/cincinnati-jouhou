@@ -21,4 +21,6 @@ urlpatterns = [
     
     url(r'^events/new', views.new_event, name='new_event'),
     url(r'^events/edit/(?P<post_id>[0-9]+)', views.edit_event, name='edit_event'),
+    
+    # url(r'^javascript_templates', views.javascript_templates, name='javascript_templates'),
 ]
