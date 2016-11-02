@@ -1,7 +1,7 @@
-{% load staticfiles %}<!DOCTYPE html>
-<html lang="en">
+{% load staticfiles %}{% load i18n %}<!DOCTYPE html>
+<html>
 <head>
-  <title>Cincinnati J&#333;h&#333;</title>
+  <title>{% trans 'Cincinnati Jōhō' %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1, user-scalable=no">
   
   <!-- jQuery -->
@@ -34,7 +34,7 @@
   <link rel="stylesheet" href="{% static 'js/microfeed/microfeed.css' %}">
   
   <!-- TinyMCE for WYSIWYG textareas -->
-  <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+  <script src="{% static 'js/tinymce/tinymce.min.js' %}"></script>
   
   
 <style>
@@ -78,7 +78,7 @@
 		</div>
 		<div class="col-xs-6">
 		    <div style="padding-top:17px;text-align:right;">
-		    	<a href="mailto:thebellsofohio@hotmail.com">CONTACT US</a>
+		    	<a href="mailto:thebellsofohio@hotmail.com">{% trans 'CONTACT US' %}</a>
 		    </div>
 		</div>
     </div>

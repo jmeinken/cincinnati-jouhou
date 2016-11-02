@@ -20,35 +20,35 @@ msgstr ""
 
 #: main/forms.py:24
 msgid "No password set."
-msgstr ""
+msgstr "パスワードを入力してください"
 
 #: main/forms.py:30
 msgid "Invalid password format or unknown hashing algorithm."
-msgstr ""
+msgstr "このパスワードは無効です"
 
 #: main/forms.py:62 main/forms.py:137
 msgid "The two password fields didn't match."
-msgstr ""
+msgstr "パスワードが違います"
 
 #: main/forms.py:64
 msgid "Password"
-msgstr ""
+msgstr "パスワード"
 
 #: main/forms.py:66
 msgid "Password confirmation"
-msgstr ""
+msgstr "パスワードの確認"
 
 #: main/forms.py:68
 msgid "Enter the same password as above, for verification."
-msgstr ""
+msgstr "確認のためもう一度パスワードを入力してください"
 
 #: main/forms.py:139
 msgid "New password"
-msgstr ""
+msgstr "新しいパスワード"
 
 #: main/forms.py:141
 msgid "New password confirmation"
-msgstr ""
+msgstr "新しいパスワードの確認"
 
 #: main/templates/core/navbar.html:12
 msgid "Cincinnati Jōhō"
@@ -56,56 +56,56 @@ msgstr "シンシナティ情報"
 
 #: main/templates/core/navbar.html:26
 msgid "Logged in as"
-msgstr ""
+msgstr "ユーザー名"
 
 #: main/templates/core/navbar.html:29
 msgid "Account Settings"
-msgstr ""
+msgstr "アカウントの変更"
 
 #: main/templates/core/navbar.html:30
 msgid "Logout"
-msgstr ""
+msgstr "ログアウト"
 
 #: main/templates/core/navbar.html:37
 msgid "create account"
-msgstr ""
+msgstr "アカウントの設定"
 
 #: main/templates/core/navbar.html:44
 msgid "username or email"
-msgstr ""
+msgstr "ユーザー名またはメールアドレス"
 
 #: main/templates/core/navbar.html:45
 msgid "password"
-msgstr ""
+msgstr "パスワード"
 
 #: main/templates/core/navbar.html:47
 msgid "login"
-msgstr ""
+msgstr "ログイン"
 
 #: main/templates/main/home.html:19 pages/templates/pages/list.html:8
 #: pages/templates/pages/page.html:8
 msgid "Home"
-msgstr ""
+msgstr "ホーム"
 
 #: main/templates/main/home.html:25
 msgid "Post an Event"
-msgstr ""
+msgstr "イベントを掲載する"
 
 #: main/templates/main/home.html:27
 msgid "Messages"
-msgstr ""
+msgstr "メッセージ"
 
 #: main/templates/snippets/page_browser.html:4
 msgid "Upcoming Events"
-msgstr ""
+msgstr "もうすぐくるイベント"
 
 #: main/templates/snippets/page_browser.html:18
 msgid "none"
-msgstr ""
+msgstr "ありません"
 
 #: main/templates/snippets/page_browser.html:26
 msgid "To Do"
-msgstr ""
+msgstr "する事"
 
 #: main/templates/snippets/page_browser.html:29 pages/views.py:21
 msgid "Restaurants"
@@ -113,11 +113,11 @@ msgstr "レストラン"
 
 #: main/templates/snippets/page_browser.html:30 pages/views.py:22
 msgid "Local Destinations"
-msgstr ""
+msgstr "お出掛けスポット（シンシナティ周辺）"
 
 #: main/templates/snippets/page_browser.html:31 pages/views.py:23
 msgid "Regional Destinations"
-msgstr ""
+msgstr "お出掛けスポット（シンシナティ以外）"
 
 #: main/templates/snippets/page_browser.html:37
 #, fuzzy
@@ -127,31 +127,31 @@ msgstr "シンシナティ情報"
 
 #: main/templates/snippets/page_browser.html:40 pages/views.py:24
 msgid "Housing"
-msgstr ""
+msgstr "住宅情報"
 
 #: main/templates/snippets/page_browser.html:41 pages/views.py:25
 msgid "Shopping"
-msgstr ""
+msgstr "お買い物"
 
 #: main/templates/snippets/page_browser.html:42 pages/views.py:26
 msgid "Medical"
-msgstr ""
+msgstr "病院"
 
 #: main/templates/snippets/page_browser.html:43 pages/views.py:28
 msgid "Education"
-msgstr ""
+msgstr "学校"
 
 #: main/templates/snippets/page_browser.html:44 pages/views.py:27
 msgid "Transportation"
-msgstr ""
+msgstr "交通情報"
 
 #: main/templates/snippets/page_browser.html:51
 msgid "Add Content"
-msgstr ""
+msgstr "新しい項目"
 
 #: main/templates/snippets/page_browser.html:54
 msgid "Add New Page"
-msgstr ""
+msgstr "新しいページの作成"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:14
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:56
@@ -160,7 +160,7 @@ msgstr ""
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:25
 msgid "Edit post:"
-msgstr "ポストを変える"
+msgstr "ポストの変更"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:30
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:118
@@ -169,29 +169,29 @@ msgstr "ポストを変える"
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:361
 #: pages/templates/pages/new_page.html:158 pages/templates/pages/page.html:61
 msgid "Cancel"
-msgstr ""
+msgstr "キャンセル"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:31
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:119
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:87
 msgid "Add a comment..."
-msgstr ""
+msgstr "コメントする"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:89
 msgid "Reply"
-msgstr ""
+msgstr "返事をする"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:113
 msgid "Edit comment:"
-msgstr ""
+msgstr "コメントの変更"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:132
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:144
 msgid "Edit"
-msgstr ""
+msgstr "変更"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:133
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:145
@@ -199,59 +199,59 @@ msgstr ""
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:323
 #: pages/templates/pages/page.html:65
 msgid "Delete"
-msgstr ""
+msgstr "消去"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:154
 msgid "show previous comments"
-msgstr ""
+msgstr "他のコメントを表示する"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:160
 msgid "show more posts"
-msgstr ""
+msgstr "他のポストを表示する"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:172
 msgid "Ask a question, sell something, share pictures, ..."
-msgstr ""
+msgstr "質問、売りたい・買いたい、写真を載せるetc..."
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:175
 msgid "Attach an Image"
-msgstr ""
+msgstr "メッセージに画像をつける"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:176
 msgid "Share"
-msgstr ""
+msgstr "シェア"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:279
 msgid "more pictures"
-msgstr ""
+msgstr "もっと写真を見る"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:293
 msgid "Delete Post"
-msgstr ""
+msgstr "ポストを消去する"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:296
 msgid "Are you sure you want to delete this post?"
-msgstr ""
+msgstr "本当に消去しますか？"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:314
 msgid "Delete Comment"
-msgstr ""
+msgstr "コメントを消去する"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:317
 msgid "Are you sure you want to delete this comment?"
-msgstr ""
+msgstr "本当に消去しますか？"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:335
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:362
 #: pages/templates/pages/new_page.html:102
 #: pages/templates/pages/new_page.html:132
 msgid "Add Image"
-msgstr ""
+msgstr "画像をつける"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:341
 #: pages/templates/pages/new_page.html:138
 msgid "select image"
-msgstr ""
+msgstr "画像を選ぶ"
 
 #: pages/models.py:41 pages/models.py:69
 msgid "title"
@@ -259,87 +259,86 @@ msgstr "タイトル"
 
 #: pages/models.py:43
 msgid "teaser"
-msgstr ""
+msgstr "詳細"
 
 #: pages/models.py:44
 msgid "body"
-msgstr ""
+msgstr "もっと詳しく"
 
 #: pages/models.py:45
 msgid "address"
-msgstr ""
+msgstr "住所"
 
 #: pages/models.py:46 pages/models.py:71
 msgid "order"
-msgstr ""
+msgstr "順番"
 
 #: pages/models.py:47
 msgid "category"
-msgstr ""
+msgstr "カテゴリー"
 
 #: pages/models.py:70
 msgid "url"
-msgstr ""
+msgstr "URL"
 
 #: pages/models.py:75
 msgid "Page Link"
-msgstr ""
+msgstr "リンクページ"
 
 #: pages/models.py:76
 msgid "Page Links"
-msgstr ""
+msgstr "リンクページ"
 
 #: pages/templates/pages/list.html:25
 msgid "more..."
-msgstr ""
+msgstr "もっと見る"
 
 #: pages/templates/pages/list.html:29
 msgid "No items have been added yet."
-msgstr ""
+msgstr "まだありません"
 
 #: pages/templates/pages/new_page.html:94
 msgid "Post a Page"
-msgstr ""
+msgstr "ページの作成"
 
 #: pages/templates/pages/new_page.html:121
 msgid "Submit"
-msgstr ""
+msgstr "作成する"
 
 #: pages/templates/pages/new_page.html:159
 msgid "Upload Image"
-msgstr ""
+msgstr "画像をアップロードする"
 
 #: pages/templates/pages/page.html:14
 msgid "Edit Page"
-msgstr ""
+msgstr "ページの変更する"
 
 #: pages/templates/pages/page.html:15 pages/templates/pages/page.html:55
 msgid "Delete Page"
-msgstr ""
+msgstr "ページを消去する"
 
 #: pages/templates/pages/page.html:29
 msgid "LINKS"
-msgstr ""
+msgstr "リンク"
 
 #: pages/templates/pages/page.html:37
 msgid "LOCATION"
-msgstr ""
+msgstr "住所"
 
 #: pages/templates/pages/page.html:58
 msgid "Are you sure you want to permanently delete this page?"
-msgstr ""
+msgstr "このページを消去しますか？"
 
 #: pages/views.py:52
 msgid "Page successfully added."
-msgstr ""
+msgstr "ページを載せました"
 
 #: pages/views.py:63
 msgid "Page successfully deleted."
-msgstr ""
+msgstr "ページを消去しました"
 
 #: pages/views.py:82
 msgid "Page successfully edited."
-msgstr ""
+msgstr "ページを変更しました"
 
-#~ msgid "mytest"
-#~ msgstr "mytesttranslate"
+

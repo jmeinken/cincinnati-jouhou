@@ -1,3 +1,4 @@
 eclipse.preferences.version=1
 encoding//locale/ja/LC_MESSAGES/django.po=UTF-8
+encoding//main/templates/core/base.html=UTF-8
 encoding//main/templates/core/navbar.html=UTF-8

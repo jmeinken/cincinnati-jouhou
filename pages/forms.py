@@ -2,9 +2,11 @@
 
 from django import forms
 from django.forms.models import inlineformset_factory
+from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, HTML
+
 
 from . import models
 
@@ -43,7 +45,7 @@ class PageLinkForm(forms.ModelForm):
         fields = ['id', 'title', 'url']
         
 PageLinkFormSet = inlineformset_factory( models.Page, models.PageLink, form=PageLinkForm, extra=2 )
-PageLinkFormSet.title = 'Page Links'
+PageLinkFormSet.title = _('Page Links')
 PageLinkFormSet.css_class = 'page-link-form'
 
 
