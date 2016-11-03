@@ -44,7 +44,7 @@ class Post(TimeStampedModel):
         result = {}
         result['postId'] = self.id
         result['uid'] = self.user.id
-        result['username'] = self.user.username
+        result['username'] = self.user.profile.username2
         if hasattr(self.user, 'profile'):
             result['userImage'] = '/static/' + self.user.profile.get_image()
         else:
@@ -77,7 +77,7 @@ class Post(TimeStampedModel):
             comment = {
                 'commentId' : oComment.id,
                 'uid' : oComment.user.id,
-                'username' : oComment.user.username,
+                'username' : oComment.user.profile.username2,
                 'userImage' : '/static/img/generic_user.png',
                 'formatted_body' : oComment.get_formatted_body(),
                 'body' : oComment.body,
@@ -142,7 +142,7 @@ class PostComment(TimeStampedModel):
             'postId' : self.post.id,
             'commentId' : self.id,
             'uid' : self.user.id,
-            'username' : self.user.username,
+            'username' : self.user.profile.username2,
             'userImage' : '/static/img/generic_user.png',
             'formatted_body' : self.get_formatted_body(),
             'body' : self.body,
