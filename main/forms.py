@@ -137,8 +137,9 @@ class UserChangeForm(forms.ModelForm):
             'image'
         )
         super(UserChangeForm, self).__init__(*args, **kwargs)
-        oProfile = models.Profile.objects.get(user=kwargs['instance'])
-        self.fields['username2'].initial = oProfile.username2
+        qProfile = models.Profile.objects.filter(user=kwargs['instance'])
+        if qProfile:
+            self.fields['username2'].initial = qProfile[0].username2
 
     class Meta:
         model = User
