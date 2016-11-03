@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-01 17:29-0400\n"
+"POT-Creation-Date: 2016-11-02 22:41-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,33 +26,51 @@ msgstr "パスワードを入力してください"
 msgid "Invalid password format or unknown hashing algorithm."
 msgstr "このパスワードは無効です"
 
-#: main/forms.py:62 main/forms.py:137
+#: main/forms.py:62 main/forms.py:163
 msgid "The two password fields didn't match."
 msgstr "パスワードが違います"
 
-#: main/forms.py:64
+#: main/forms.py:64 main/forms.py:126
+#, fuzzy
+#| msgid "username or email"
+msgid "username"
+msgstr "ユーザー名またはメールアドレス"
+
+#: main/forms.py:65
 msgid "Password"
 msgstr "パスワード"
 
-#: main/forms.py:66
+#: main/forms.py:67
 msgid "Password confirmation"
 msgstr "パスワードの確認"
 
-#: main/forms.py:68
+#: main/forms.py:69
 msgid "Enter the same password as above, for verification."
 msgstr "確認のためもう一度パスワードを入力してください"
 
-#: main/forms.py:139
+#: main/forms.py:95
+msgid "This username is already taken."
+msgstr ""
+
+#: main/forms.py:113
+msgid "An account already exists with this email address."
+msgstr ""
+
+#: main/forms.py:165
 msgid "New password"
 msgstr "新しいパスワード"
 
-#: main/forms.py:141
+#: main/forms.py:167
 msgid "New password confirmation"
 msgstr "新しいパスワードの確認"
 
-#: main/templates/core/navbar.html:12
+#: main/templates/core/base.html:4 main/templates/core/navbar.html:12
 msgid "Cincinnati Jōhō"
 msgstr "シンシナティ情報"
+
+#: main/templates/core/base.html:81
+msgid "CONTACT US"
+msgstr ""
 
 #: main/templates/core/navbar.html:26
 msgid "Logged in as"
@@ -71,8 +89,10 @@ msgid "create account"
 msgstr "アカウントの設定"
 
 #: main/templates/core/navbar.html:44
-msgid "username or email"
-msgstr "ユーザー名またはメールアドレス"
+#, fuzzy
+#| msgid "address"
+msgid "email address"
+msgstr "住所"
 
 #: main/templates/core/navbar.html:45
 msgid "password"
@@ -120,8 +140,6 @@ msgid "Regional Destinations"
 msgstr "お出掛けスポット（シンシナティ以外）"
 
 #: main/templates/snippets/page_browser.html:37
-#, fuzzy
-#| msgid "Cincinnati Jōhō"
 msgid "Cincinnati Life"
 msgstr "シンシナティ情報"
 
@@ -167,7 +185,7 @@ msgstr "ポストの変更"
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:299
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:320
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:361
-#: pages/templates/pages/new_page.html:158 pages/templates/pages/page.html:61
+#: pages/templates/pages/new_page.html:159 pages/templates/pages/page.html:61
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -243,15 +261,19 @@ msgstr "本当に消去しますか？"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:335
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:362
-#: pages/templates/pages/new_page.html:102
-#: pages/templates/pages/new_page.html:132
+#: pages/templates/pages/new_page.html:103
+#: pages/templates/pages/new_page.html:133
 msgid "Add Image"
 msgstr "画像をつける"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:341
-#: pages/templates/pages/new_page.html:138
+#: pages/templates/pages/new_page.html:139
 msgid "select image"
 msgstr "画像を選ぶ"
+
+#: pages/forms.py:48 pages/models.py:76
+msgid "Page Links"
+msgstr "リンクページ"
 
 #: pages/models.py:41 pages/models.py:69
 msgid "title"
@@ -285,10 +307,6 @@ msgstr "URL"
 msgid "Page Link"
 msgstr "リンクページ"
 
-#: pages/models.py:76
-msgid "Page Links"
-msgstr "リンクページ"
-
 #: pages/templates/pages/list.html:25
 msgid "more..."
 msgstr "もっと見る"
@@ -297,15 +315,15 @@ msgstr "もっと見る"
 msgid "No items have been added yet."
 msgstr "まだありません"
 
-#: pages/templates/pages/new_page.html:94
+#: pages/templates/pages/new_page.html:95
 msgid "Post a Page"
 msgstr "ページの作成"
 
-#: pages/templates/pages/new_page.html:121
+#: pages/templates/pages/new_page.html:122
 msgid "Submit"
 msgstr "作成する"
 
-#: pages/templates/pages/new_page.html:159
+#: pages/templates/pages/new_page.html:160
 msgid "Upload Image"
 msgstr "画像をアップロードする"
 
@@ -340,5 +358,3 @@ msgstr "ページを消去しました"
 #: pages/views.py:82
 msgid "Page successfully edited."
 msgstr "ページを変更しました"
-
-
