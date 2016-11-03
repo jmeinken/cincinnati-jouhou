@@ -76,10 +76,10 @@ def create_account(request):
                 fh = open(UPLOADS_DIR + "user_images/" + file_name, "wb")
                 fh.write(imageArr[1].decode('base64'))
                 fh.close()
-                oProfile = models.Profile(user=oUser, image_name=file_name)
+                oProfile = models.Profile(user=oUser, image_name=file_name, username2=fUser.cleaned_data['username2'])
                 oProfile.save()
             else:
-                oProfile = models.Profile(user=oUser)
+                oProfile = models.Profile(user=oUser, username2=fUser.cleaned_data['username2'])
                 oProfile.save()
             #login user and redirect
             login(request, oUser)
@@ -105,6 +105,11 @@ def edit_account(request):
                 fh.close()
                 oProfile, created = models.Profile.objects.get_or_create(user=oUser)
                 oProfile.image_name = file_name
+                oProfile.username2 = fUser.cleaned_data['username2']
+                oProfile.save()
+            else:
+                oProfile, created = models.Profile.objects.get_or_create(user=oUser)
+                oProfile.username2 = fUser.cleaned_data['username2']
                 oProfile.save()
             #login user and redirect
             return redirect('home')

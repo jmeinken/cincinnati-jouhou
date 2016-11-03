@@ -61,6 +61,7 @@ class UserCreationForm(forms.ModelForm):
     error_messages = {
         'password_mismatch': _("The two password fields didn't match."),
     }
+    username2 = forms.CharField( label=_('username'), max_length=30, required=True )
     password1 = forms.CharField(label=_("Password"),
         widget=forms.PasswordInput)
     password2 = forms.CharField(label=_("Password confirmation"),
@@ -73,8 +74,7 @@ class UserCreationForm(forms.ModelForm):
         self.helper.form_tag = False
         self.helper.disable_csrf = False
         self.helper.layout = Layout(
-            'id',
-            'username',
+            'username2',
             'email',
             'password1',
             'password2',
@@ -86,7 +86,15 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("username","email")
+        fields = ("email",)
+        
+    def clean_username2(self):
+        username2 = self.cleaned_data.get("username2")
+        qProfile = models.Profile.objects.filter(username2=username2)
+        if qProfile:
+            self.add_error('username2', _('This username is already taken.'))
+        return username2
+
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -97,9 +105,17 @@ class UserCreationForm(forms.ModelForm):
                 code='password_mismatch',
             )
         return password2
+    
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        qUser = User.objects.filter(username=email)
+        if qUser:
+            self.add_error('email', _('An account already exists with this email address.'))
+        return email
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
+        user.username = self.cleaned_data['email']
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
@@ -107,24 +123,33 @@ class UserCreationForm(forms.ModelForm):
 
 class UserChangeForm(forms.ModelForm):
     image = forms.CharField(widget=forms.HiddenInput, required=False)
+    username2 = forms.CharField( label=_('username'), max_length=30, required=True )
     
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.disable_csrf = False
         self.helper.layout = Layout(
-            'id',
-            'username',
+            'username2',
             'email',
             HTML('{% load static %}<img id="user-image-preview" alt="user image preview" src="{% static user.profile.get_image %}" width="150" height="150" />'),
             HTML('<button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#add-image-modal">Change Image</button>'),
             'image'
         )
         super(UserChangeForm, self).__init__(*args, **kwargs)
+        oProfile = models.Profile.objects.get(user=kwargs['instance'])
+        self.fields['username2'].initial = oProfile.username2
 
     class Meta:
         model = User
-        fields = ("username","email")
+        fields = ("email",)
+        
+    def save(self, commit=True):
+        user = super(UserChangeForm, self).save(commit=False)
+        user.username = self.cleaned_data['email']
+        if commit:
+            user.save()
+        return user
 
 
         
