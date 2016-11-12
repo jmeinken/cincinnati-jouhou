@@ -6,9 +6,9 @@
 {% block content %}
 	<ul class="breadcrumb">
 	  <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
-	  <li class="active">{{page_title}}</li>
+	  <li class="active">{% trans page_title %}</li>
 	</ul>
-	<h1>{{page_title}}</h1>
+	<h1>{% trans page_title %}</h1>
 			<hr>
 	<div class="row">
 		

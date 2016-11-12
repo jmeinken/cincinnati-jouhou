@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load crispy_forms_tags %}
+{% load i18n %}
 
 {% block content %}
 
@@ -23,7 +24,7 @@ $(function() {
         deleteCssClass: 'delete-row btn btn-sm btn-danger',
         deleteText: '<i class="fa fa-times" aria-hidden="true"></i>',
         addCssClass: 'add-row btn btn-success',
-        addText: '<i class="fa fa-plus" aria-hidden="true"></i> Add another event time',
+        addText: '<i class="fa fa-plus" aria-hidden="true"></i> {% trans "Add another event time" %}',
         added: function() {
         	attachEvents();
         }
@@ -43,7 +44,7 @@ $(function() {
 </style>
 
 
-<h1>Post an Event</h1>
+<h1>{% trans 'Post an Event' %}</h1>
 <hr>
 
 <form method="post">
@@ -57,7 +58,7 @@ $(function() {
 
 {{ fPost|crispy }}
 
-<button type="submit" class="btn btn-primary">Submit</button>
+<button type="submit" class="btn btn-primary">{% trans 'Submit' %}</button>
 
 </form>
 

@@ -1,10 +1,14 @@
 from __future__ import unicode_literals
-import pretty
+# import pretty
 import re
 
 from django.db import models
+from django.utils import formats
 from django.conf import settings
 from django.utils.timezone import localtime
+from django.utils.translation import ugettext_lazy as _
+
+from feed.pretty_date import pretty_date
 
 def replace_url_to_link(value):
     # Replace url to link
@@ -26,7 +30,7 @@ class TimeStampedModel(models.Model):
 
 class Post(TimeStampedModel):
     user        = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    body        = models.TextField(max_length=3000, blank=True, null=True)
+    body        = models.TextField(max_length=3000, blank=True, null=True, verbose_name=_('body'))
     
     # POST: postId, uid, username, userImage, body, date, editable
     # COMMENTS: commentId, uid, username, userImage, body, date
@@ -51,7 +55,7 @@ class Post(TimeStampedModel):
             result['userImage'] = '/static/img/generic_user.png'
         result['formatted_body'] = self.get_formatted_body()
         result['body'] = self.body
-        result['date'] = pretty.date( localtime( self.created ).replace(tzinfo=None) )
+        result['date'] = pretty_date( localtime( self.created ).replace(tzinfo=None) )
         if self.user.id == currentUid:
             result['editable'] = True
         else:
@@ -63,9 +67,9 @@ class Post(TimeStampedModel):
             result['times'] = []
             for oTime in self.eventpost.eventposttime_set.all():
                 temp = {}
-                temp['startDate'] = oTime.start_date.strftime('%b %-d, %Y')
-                temp['startTime'] = oTime.start_time.strftime('%I:%M%p').lstrip('0').lower()
-                temp['endTime'] = oTime.end_time.strftime('%I:%M%p').lstrip('0').lower()
+                temp['startDate'] = formats.date_format(oTime.start_date, "DATE_FORMAT")
+                temp['startTime'] = formats.date_format(oTime.start_time, "TIME_FORMAT")
+                temp['endTime'] = formats.date_format(oTime.end_time, "TIME_FORMAT")
                 result['times'].append(temp)
             result['editLink'] = '/microfeed/posts/view/' + str(self.id)
         else:
@@ -81,7 +85,7 @@ class Post(TimeStampedModel):
                 'userImage' : '/static/img/generic_user.png',
                 'formatted_body' : oComment.get_formatted_body(),
                 'body' : oComment.body,
-                'date' : pretty.date( localtime( oComment.created ).replace(tzinfo=None) ),
+                'date' : pretty_date( localtime( oComment.created ).replace(tzinfo=None) ),
             }
             if hasattr(oComment.user, 'profile'):
                 comment['userImage'] = '/static/' + oComment.user.profile.get_image()
@@ -101,16 +105,16 @@ class Post(TimeStampedModel):
         
 class EventPost(TimeStampedModel):
     post        = models.OneToOneField("Post", on_delete=models.CASCADE, primary_key=True)
-    title       = models.CharField(max_length=255)
+    title       = models.CharField(max_length=255, verbose_name=_('title'))
     #start_date  = models.DateField()
     #start_time  = models.TimeField()
     #end_time    = models.TimeField(blank=True, null=True)
     
 class EventPostTime(TimeStampedModel):
     event_post  = models.ForeignKey("EventPost", on_delete=models.CASCADE)
-    start_date  = models.DateField()
-    start_time  = models.TimeField()
-    end_time    = models.TimeField(blank=True, null=True)
+    start_date  = models.DateField(verbose_name=_('start date'))
+    start_time  = models.TimeField(verbose_name=_('start time'))
+    end_time    = models.TimeField(blank=True, null=True, verbose_name=_('end time'))
     
     class Meta:
         ordering = ['start_date', 'start_time']
@@ -129,7 +133,7 @@ class PostImage(TimeStampedModel):
 class PostComment(TimeStampedModel):
     user        = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     post        = models.ForeignKey("Post", on_delete=models.CASCADE)
-    body        = models.TextField(max_length=1000)
+    body        = models.TextField(max_length=1000, verbose_name=_('body'))
     
     def get_formatted_body(self):
         value = self.body.replace('\n', '<br />')
@@ -146,7 +150,7 @@ class PostComment(TimeStampedModel):
             'userImage' : '/static/img/generic_user.png',
             'formatted_body' : self.get_formatted_body(),
             'body' : self.body,
-            'date' : pretty.date( localtime( self.created ).replace(tzinfo=None) ),
+            'date' : pretty_date( localtime( self.created ).replace(tzinfo=None) ),
         }
         if hasattr(self.user, 'profile'):
             response['userImage'] = '/static/' + self.user.profile.get_image()

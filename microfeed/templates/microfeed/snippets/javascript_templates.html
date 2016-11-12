@@ -385,6 +385,28 @@
 		</div>
 	</div>
 </script>
+
+<script type="text/template" id="post-form-login-template">
+	<div class="alert alert-info">
+		{% url 'login' as login_url %}
+		{% url 'create_account' as create_account_url %}
+		{% blocktrans %}
+			Please <a href="{{login_url}}" class="alert-link">login</a> or <a href="{{create_account_url}}" class="alert-link">create an account</a> to post.
+		{% endblocktrans %}
+	</div>
+</script>
+
+<script type="text/template" id="comment-form-login-template">
+	<div style="font-size:0.9em;font-style: italic;text-align:center;">
+		<span class="text-muted">
+		{% url 'login' as login_url %}
+		{% url 'create_account' as create_account_url %}
+		{% blocktrans %}
+			<a href="{{login_url}}">login</a> or <a href="{{create_account_url}}" class="alert-link">create account</a> to comment
+		{% endblocktrans %}
+		</span>
+	</div>
+</script>
 	
 	
 	

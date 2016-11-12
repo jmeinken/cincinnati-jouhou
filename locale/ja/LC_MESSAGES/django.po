@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-02 22:41-0400\n"
+"POT-Creation-Date: 2016-11-12 00:45-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,98 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+#: feed/pretty_date.py:6
+msgid " ago"
+msgstr "前"
+
+#: feed/pretty_date.py:7
+msgid "in "
+msgstr "あと"
+
+#: feed/pretty_date.py:42
+msgid "now"
+msgstr "今"
+
+#: feed/pretty_date.py:43
+msgid " seconds"
+msgstr "秒"
+
+#: feed/pretty_date.py:44
+msgid "a minute ago"
+msgstr "１分前"
+
+#: feed/pretty_date.py:44
+msgid "in a minute"
+msgstr "１分後"
+
+#: feed/pretty_date.py:45
+msgid " minutes"
+msgstr "分"
+
+#: feed/pretty_date.py:46
+msgid "an hour ago"
+msgstr "1時間前"
+
+#: feed/pretty_date.py:46
+msgid "in an hour"
+msgstr "1時間後"
+
+#: feed/pretty_date.py:47
+msgid " hours"
+msgstr "時間"
+
+#: feed/pretty_date.py:49
+msgid "today"
+msgstr "今日"
+
+#: feed/pretty_date.py:50
+msgid "yesterday"
+msgstr "昨日"
+
+#: feed/pretty_date.py:50
+msgid "tomorrow"
+msgstr "明日"
+
+#: feed/pretty_date.py:51
+msgid "day before"
+msgstr "おとつい"
+
+#: feed/pretty_date.py:51
+msgid "day after"
+msgstr "明後日"
+
+#: feed/pretty_date.py:53
+msgid "last week"
+msgstr "先週"
+
+#: feed/pretty_date.py:53
+msgid "next week"
+msgstr "来週"
+
+#: feed/pretty_date.py:55
+msgid "last month"
+msgstr "先月"
+
+#: feed/pretty_date.py:55
+msgid "next month"
+msgstr "来月"
+
+#: feed/pretty_date.py:56
+msgid " months"
+msgstr "月"
+
+#: feed/pretty_date.py:57
+msgid "last year"
+msgstr "昨年"
+
+#: feed/pretty_date.py:57
+msgid "next year"
+msgstr "来年"
+
+#: feed/pretty_date.py:58
+msgid " years"
+msgstr "年"
 
 #: main/forms.py:24
 msgid "No password set."
@@ -50,11 +142,11 @@ msgstr "確認のためもう一度パスワードを入力してください"
 
 #: main/forms.py:95
 msgid "This username is already taken."
-msgstr ""
+msgstr "このユーザーネームはすでに使われています"
 
 #: main/forms.py:113
 msgid "An account already exists with this email address."
-msgstr ""
+msgstr "このメールアドレスはすでに使われています"
 
 #: main/forms.py:165
 msgid "New password"
@@ -70,7 +162,7 @@ msgstr "シンシナティ情報"
 
 #: main/templates/core/base.html:81
 msgid "CONTACT US"
-msgstr ""
+msgstr "管理人に連絡"
 
 #: main/templates/core/navbar.html:26
 msgid "Logged in as"
@@ -108,6 +200,7 @@ msgid "Home"
 msgstr "ホーム"
 
 #: main/templates/main/home.html:25
+#: microfeed/templates/microfeed/new_event.html:47
 msgid "Post an Event"
 msgstr "イベントを掲載する"
 
@@ -171,10 +264,39 @@ msgstr "新しい項目"
 msgid "Add New Page"
 msgstr "新しいページの作成"
 
+#: microfeed/models.py:33 microfeed/models.py:136 pages/models.py:44
+msgid "body"
+msgstr "もっと詳しく"
+
+#: microfeed/models.py:108 pages/models.py:41 pages/models.py:69
+msgid "title"
+msgstr "タイトル"
+
+#: microfeed/models.py:115
+msgid "start date"
+msgstr "開催日"
+
+#: microfeed/models.py:116
+msgid "start time"
+msgstr "開始時間"
+
+#: microfeed/models.py:117
+msgid "end time"
+msgstr "終了時間"
+
+#: microfeed/templates/microfeed/new_event.html:27
+msgid "Add another event time"
+msgstr "別の日に同じイベントがある場合"
+
+#: microfeed/templates/microfeed/new_event.html:61
+#: pages/templates/pages/new_page.html:122
+msgid "Submit"
+msgstr "作成する"
+
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:14
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:56
 msgid "posted by"
-msgstr ""
+msgstr "投稿した人"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:25
 msgid "Edit post:"
@@ -185,6 +307,7 @@ msgstr "ポストの変更"
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:299
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:320
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:361
+#: microfeed/templates/microfeed/view_post.html:52
 #: pages/templates/pages/new_page.html:159 pages/templates/pages/page.html:61
 msgid "Cancel"
 msgstr "キャンセル"
@@ -196,7 +319,7 @@ msgstr "保存"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:87
 msgid "Add a comment..."
-msgstr "コメントする"
+msgstr "コメントをする"
 
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:89
 msgid "Reply"
@@ -215,6 +338,7 @@ msgstr "変更"
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:145
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:302
 #: microfeed/templates/microfeed/snippets/javascript_templates.html:323
+#: microfeed/templates/microfeed/view_post.html:57
 #: pages/templates/pages/page.html:65
 msgid "Delete"
 msgstr "消去"
@@ -271,21 +395,65 @@ msgstr "画像をつける"
 msgid "select image"
 msgstr "画像を選ぶ"
 
+#: microfeed/templates/microfeed/snippets/javascript_templates.html:393
+#, python-format
+msgid ""
+"\n"
+"\t\t\tPlease <a href=\"%(login_url)s\" class=\"alert-link\">login</a> or <a "
+"href=\"%(create_account_url)s\" class=\"alert-link\">create an account</a> "
+"to post.\n"
+"\t\t"
+msgstr ""
+"\n"
+"\t\t\t投稿するのに<a href=\"%(login_url)s\" class=\"alert-link\">ログイン</a>"
+"か<a href=\"%(create_account_url)s\" class=\"alert-link\">アカウントを作成</"
+"a> してください。\n"
+"\t\t"
+
+#: microfeed/templates/microfeed/snippets/javascript_templates.html:404
+#, python-format
+msgid ""
+"\n"
+"\t\t\t<a href=\"%(login_url)s\">login</a> or <a href=\"%(create_account_url)s"
+"\" class=\"alert-link\">create account</a> to comment\n"
+"\t\t"
+msgstr ""
+"\n"
+"\t\t\tコメントするのに<a href=\"%(login_url)s\">ログイン</a>か<a href="
+"\"%(create_account_url)s\" class=\"alert-link\">アカウントを作成</a>してくだ"
+"さい。\n"
+"\t\t"
+
+#: microfeed/templates/microfeed/view_post.html:11
+#: microfeed/templates/microfeed/view_post.html:46
+#, fuzzy
+#| msgid "Delete Comment"
+msgid "Delete Event"
+msgstr "コメントを消去する"
+
+#: microfeed/templates/microfeed/view_post.html:12
+#, fuzzy
+#| msgid "Edit comment:"
+msgid "Edit Event"
+msgstr "コメントの変更"
+
+#: microfeed/templates/microfeed/view_post.html:16
+msgid "Event"
+msgstr "イベント"
+
+#: microfeed/templates/microfeed/view_post.html:49
+#, fuzzy
+#| msgid "Are you sure you want to delete this comment?"
+msgid "Are you sure you want to delete this event?"
+msgstr "本当に消去しますか？"
+
 #: pages/forms.py:48 pages/models.py:76
 msgid "Page Links"
 msgstr "リンクページ"
 
-#: pages/models.py:41 pages/models.py:69
-msgid "title"
-msgstr "タイトル"
-
 #: pages/models.py:43
 msgid "teaser"
 msgstr "詳細"
-
-#: pages/models.py:44
-msgid "body"
-msgstr "もっと詳しく"
 
 #: pages/models.py:45
 msgid "address"
@@ -318,10 +486,6 @@ msgstr "まだありません"
 #: pages/templates/pages/new_page.html:95
 msgid "Post a Page"
 msgstr "ページの作成"
-
-#: pages/templates/pages/new_page.html:122
-msgid "Submit"
-msgstr "作成する"
 
 #: pages/templates/pages/new_page.html:160
 msgid "Upload Image"

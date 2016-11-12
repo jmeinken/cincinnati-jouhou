@@ -17,12 +17,12 @@ from feed.functions import UPLOADS_DIR
 def set_english(request):
     user_language = 'en-us'
     request.session[translation.LANGUAGE_SESSION_KEY] = user_language
-    return redirect('home')
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 def set_japanese(request):
     user_language = 'ja'
     request.session[translation.LANGUAGE_SESSION_KEY] = user_language
-    return redirect('home')
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 def home(request):
     context = {}
