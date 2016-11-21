@@ -13,6 +13,8 @@ from feed.functions import validate_form_with_inlines
 from feed import functions
 from feed.functions import UPLOADS_DIR
 
+from field_trans.helpers import set_translation, get_verbose_language
+
 from . import models
 from . import forms
 
@@ -59,7 +61,8 @@ def new_page(request):
 def delete_page(request):
     page_id = int( request.POST.get('page_id') )
     oPage = models.Page.objects.all().get(id=page_id)
-    oPage.delete()
+    oPage.visible = False
+    oPage.save()
     messages.success( request, _('Page successfully deleted.') )
     return redirect('home')
 
@@ -68,6 +71,8 @@ def delete_page(request):
 def edit_page(request, page_id):
     context = {}
     oPage = get_object_or_404(models.Page, pk=page_id)
+    if not oPage.visible:
+        raise Http404("Page has been deleted.")
     form = forms.PageForm(instance=oPage)
     children = [forms.PageLinkFormSet]
     if request.method == 'POST':
@@ -90,17 +95,42 @@ def edit_page(request, page_id):
     context['children'] = children
     return render(request, 'pages/new_page.html', context)
 
+@login_required
+def translate_page(request, page_id):
+    context = {}
+    oPage = models.Page.visible_obj.all().get(pk=page_id)
+    if request.method == 'POST':
+        language = request.POST.get('language')
+        title = request.POST.get('title', '')
+        body = request.POST.get('body', '')
+        teaser = request.POST.get('teaser', '')
+        set_translation('page', 'title', oPage.id, language, title)
+        set_translation('page', 'body', oPage.id, language, body)
+        set_translation('page', 'teaser', oPage.id, language, teaser)
+        messages.success( request, _('Page successfully translated.') )
+        return redirect('pages:page', page_id=oPage.id)
+    context['oPage'] = oPage
+    lang = request.GET.get('language')
+    if lang:
+        context['language'] = lang
+    else:
+        context['language'] = request.LANGUAGE_CODE
+    context['verbose_language'] = get_verbose_language(context['language'])
+    return render(request, 'pages/translate_page.html', context)
+    
+
 def page(request, page_id):
     context = {}
     context['upcoming_events'] = functions.get_upcoming_events()
-    oPage = models.Page.objects.all().get(pk=page_id)
+    oPage = models.Page.visible_obj.all().get(pk=page_id)
     context['oPage'] = oPage
+    context['verbose_language'] = get_verbose_language(request.LANGUAGE_CODE)
     return render(request, 'pages/page.html', context)
 
 def list(request, category):
     context = {}
     context['upcoming_events'] = functions.get_upcoming_events()
-    qPage = models.Page.objects.all().filter(category=category)
+    qPage = models.Page.visible_obj.all().filter(category=category)
     context['qPage'] = qPage
     context['page_title'] = page_titles[category]
     return render(request, 'pages/list.html', context)

@@ -564,6 +564,17 @@ $( document ).ready(function() {
     	var imageData = $('.image-editor').cropit('export');
     	window.open(imageData);
     });
+    
+    $('.show-post-form').click(function() {
+    	$('#post-form-block').hide().slideDown();
+    	var placeholder = $(this).attr('data-placeholder');
+    	$('#new-post-form-body').attr('placeholder',placeholder);
+    });
+    
+    $('.hide-post-form').click(function() {
+    	$('#post-form-block').slideUp();
+    	return false;
+    });
 
 });
 

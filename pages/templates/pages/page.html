@@ -4,24 +4,50 @@
 
 {% block content %}
 
-<ul class="breadcrumb">
+	<ul class="breadcrumb">
 	  <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
 	  <li><a href="{% url 'pages:list' oPage.category %}">{% trans oPage.category %}</a></li>
-	  <li class="active">{{oPage.title}}</li>
+	  <li class="active">{{oPage.trans_title}}</li>
 	</ul>
+	{% if oPage.has_translation and user.is_staff %}
+		<div class="alert alert-warning">
+			<h4>Viewing {{ verbose_language }} translation</h4>
+		</div>
+	{% endif %}
 	<div style="float:right">
 			{% if user.is_staff %}
-				<a href="{% url 'pages:edit_page' oPage.id %}" class="btn btn-warning">{% trans 'Edit Page' %}</a>
-				<button class="btn btn-danger" data-toggle="modal" data-target="#delete-page-modal">{% trans 'Delete Page' %}</button>
+				
+				{% if oPage.has_translation %}
+					<a href="{% url 'pages:translate_page' oPage.id %}" class="btn btn-primary">
+						<i class="fa fa-globe" aria-hidden="true"></i> 
+						{% trans 'Edit This Translation' %}
+					</a>
+					<a href="{% url 'pages:edit_page' oPage.id %}" class="btn btn-primary">
+						<i class="fa fa-pencil" aria-hidden="true"></i> 
+						{% trans 'Edit Original' %}
+					</a>
+				{% else %}
+					<a href="{% url 'pages:edit_page' oPage.id %}" class="btn btn-primary">
+						<i class="fa fa-pencil" aria-hidden="true"></i> 
+						{% trans 'Edit Page' %}
+					</a>
+					<a href="{% url 'pages:translate_page' oPage.id %}" class="btn btn-primary">
+						<i class="fa fa-globe" aria-hidden="true"></i> 
+						{% trans 'Translate to ' %}{{ verbose_language }}
+					</a>
+				{% endif %}
+				<button class="btn btn-danger" data-toggle="modal" data-target="#delete-page-modal">
+					<i class="fa fa-trash" aria-hidden="true"></i> 
+					{% trans 'Delete Page' %}
+				</button>
 			{% endif %}
 	</div>
-	<h1>{{oPage.title}}</h1>
+	<h1>{{oPage.trans_title}}</h1>
 	<hr>
 	<div class="row">
 		
 		<div class="col-sm-6">
-			
-			{{oPage.body|safe}}
+			{{oPage.trans_body|safe}}
 		</div>
 		<div class="col-sm-3">
 			{% if oPage.pagelink_set.all %}

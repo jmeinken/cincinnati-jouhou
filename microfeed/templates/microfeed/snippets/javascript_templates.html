@@ -162,19 +162,20 @@
 	</script>
 	
 	<script type="text/template" id="main-container-template">
-			<div id="post-form-block"></div>
+			<div id="post-form-block" style="display:none;border-bottom:#B0B0B0 1px solid;"></div>
 			<div id="output" ></div>
 	</script>
 	
 	<script type="text/template" id="post-form-template">
 		<form id="new-post-form">
 			<input type="hidden" name="uid" value="[[uid]]" />
-			<textarea name="body" class="form-control" rows="4" placeholder="{% trans 'Ask a question, sell something, share pictures, ...' %}"></textarea>
+			<textarea id="new-post-form-body" name="body" class="form-control" rows="4" placeholder="{% trans 'Ask a question, sell something, share pictures, ...' %}"></textarea>
 			<div id="new-post-image-block" style="clear:both; overflow:hidden;background-color:black;"></div>
-			<div style="text-align:right;padding:3px 0;border-bottom:#B0B0B0 1px solid ">
-				<button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#add-image-modal">{% trans 'Attach an Image' %}</button>
-				<button type="submit" id="new-post-btn" class="btn btn-sm btn-primary">{% trans 'Share' %}</button>
-			</div>
+				<div style="text-align:right;padding:3px 0 0 0;">
+					<button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#add-image-modal">{% trans 'Attach an Image' %}</button>
+					<button type="submit" id="new-post-btn" class="btn btn-sm btn-primary">{% trans 'Share' %}</button>
+				</div>
+				<a href="#" class="hide-post-form"><i class="fa fa-angle-double-up fa-2x" aria-hidden="true"></i></a>
 		</form>
 	</script>
 	

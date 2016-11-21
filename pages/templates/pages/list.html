@@ -16,10 +16,10 @@
 			
 			{% for oPage in qPage %}
 				<div class="well">
-					<h2><a href="{% url 'pages:page' oPage.id %}">{{oPage.title}}</a></h2>
-					{% if oPage.teaser %}
+					<h2><a href="{% url 'pages:page' oPage.id %}">{{oPage.trans_title}}</a></h2>
+					{% if oPage.trans_teaser %}
 						<hr>
-						{{oPage.teaser|safe}}
+						{{oPage.trans_teaser|safe}}
 					{% endif %}
 					<div style="text-align:right;">
 						<a href="{% url 'pages:page' oPage.id %}">{% trans 'more...' %}</a>

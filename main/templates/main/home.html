@@ -22,7 +22,16 @@
 
 	<div class="col-sm-7 col-sm-offset-1">
 		{% if user.is_authenticated %}
-			<div style="float:right;"><a href="{% url 'microfeed:new_event' %}" class="btn btn-primary">{% trans 'Post an Event' %}</a></div>
+			<div style="float:right;">
+				<strong class="text-success">POST:</strong>
+				<button type="button" class="btn btn-primary show-post-form" data-placeholder="write a general message...">
+					{% trans 'General Message' %}
+				</button>
+				<button type="button" class="btn btn-primary show-post-form" data-placeholder="buy or sell something...">
+					{% trans 'Classified Ad' %}
+				</button>
+				<a href="{% url 'microfeed:new_event' %}" class="btn btn-primary">{% trans 'Event' %}</a>
+			</div>
 		{% endif %}
 		<div style="background-color:#95A5A6;display:inline-block; padding:10px 12px;">{% trans 'Messages' %}</div>
 		<div style="background-color:#95A5A6;padding:1px;">

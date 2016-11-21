@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'main',
     'microfeed',
     'pages',
+    'field_trans',
 ]
 
 MIDDLEWARE = [

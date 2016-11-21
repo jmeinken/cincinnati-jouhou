@@ -7,6 +7,9 @@ from django.utils.timezone import localtime
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
+from field_trans.helpers import get_translation
+
+
 
 
 
@@ -17,6 +20,10 @@ class TimeStampedModel(models.Model):
     class Meta:
         abstract = True
         
+        
+class ActivePageManager(models.Manager):
+    def get_queryset(self):
+        return super(ActivePageManager, self).get_queryset().filter(visible=True)
         
 class Page(TimeStampedModel):
     RESTAURANT = 'restaurant'
@@ -41,13 +48,67 @@ class Page(TimeStampedModel):
     title           = models.CharField(max_length=255, verbose_name=_('title'),)
     user            = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     teaser          = models.TextField(blank=True, null=True, verbose_name=_('teaser'),)
-    body            = models.TextField(verbose_name=_('body'),)
+    body            = models.TextField(blank=True, null=True, verbose_name=_('body'),)
     address         = models.CharField(max_length=500, blank=True, null=True, verbose_name=_('address'),)
     order           = models.IntegerField(default=0, verbose_name=_('order'),)
     category        = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default=RESTAURANT, verbose_name=_('category'),)
+    visible         = models.BooleanField(default=True)
+    
+    objects = models.Manager() # The default manager.
+    visible_obj = ActivePageManager() # The Dahl-specific manager.
     
     def __str__(self):
         return self.title
+    
+    def has_translation(self):
+        title = get_translation('page', 'title', self.id)
+        body = get_translation('page', 'body', self.id)
+        teaser = get_translation('page', 'teaser', self.id)
+        if title or body or teaser:
+            return True
+        return False
+    
+    def trans_title(self):
+        translation = get_translation('page', 'title', self.id)
+        if translation:
+            return translation
+        else:
+            return self.title
+        
+    def trans_body(self):
+        translation = get_translation('page', 'body', self.id)
+        if translation:
+            return translation
+        else:
+            return self.body
+        
+    def trans_teaser(self):
+        translation = get_translation('page', 'teaser', self.id)
+        if translation:
+            return translation
+        else:
+            return self.teaser
+        
+    def trans_only_title(self):
+        translation = get_translation('page', 'title', self.id)
+        if translation:
+            return translation
+        else:
+            return ''
+        
+    def trans_only_body(self):
+        translation = get_translation('page', 'body', self.id)
+        if translation:
+            return translation
+        else:
+            return ''
+        
+    def trans_only_teaser(self):
+        translation = get_translation('page', 'teaser', self.id)
+        if translation:
+            return translation
+        else:
+            return ''
     
     class Meta:
         ordering = ['order', '-id']
